@@ -1,0 +1,18 @@
+/* @import "reset.css"; */
+:root {
+  --p-primary: #512da8;
+  --p-light: #8559da;
+  --p-dark: #140078;
+}
+
+ul {
+  padding: 0 20px;
+}
+
+h1 {
+  color: var(--p-primary);
+}
+
+h2 {
+  color: var(--p-light);
+}
