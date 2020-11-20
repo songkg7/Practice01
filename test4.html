@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <table>
+      <caption align="top">
+        성적표
+      </caption>
+      <tr class="head">
+        <th>이름</th>
+        <th>국어</th>
+        <th>영어</th>
+      </tr>
+      <tr align="center">
+        <td>사오정</td>
+        <td>90</td>
+        <td>70</td>
+      </tr>
+      <tr align="center">
+        <td>저팔계</td>
+        <td>98</td>
+        <td>100</td>
+      </tr>
+      <tr align="center">
+        <td>손오공</td>
+        <td>95</td>
+        <td>100</td>
+      </tr>
+    </table>
+    <hr />
+    <table>
+      <caption align="top">
+        성적표
+      </caption>
+      <tr class="head">
+        <th>이름</th>
+        <th>국어</th>
+        <th>영어</th>
+      </tr>
+      <tr align="center">
+        <td>사오정</td>
+        <td colspan="2">70</td>
+        <!-- <td>70</td> -->
+      </tr>
+      <tr align="center">
+        <td>저팔계</td>
+        <td>98</td>
+        <td rowspan="2">100</td>
+      </tr>
+      <tr align="center">
+        <td>손오공</td>
+        <td>95</td>
+        <!-- <td>100</td> -->
+      </tr>
+    </table>
+    <hr />
+    <table>
+      <caption align="top">
+        성적표
+      </caption>
+      <tr class="head">
+        <th>이름</th>
+        <th>국어</th>
+        <th>영어</th>
+      </tr>
+      <tr align="center">
+        <td>사오정</td>
+        <td colspan="2" rowspan="3">70</td>
+        <!-- <td>70</td> -->
+      </tr>
+      <tr align="center">
+        <td>저팔계</td>
+        <!-- <td>98</td> -->
+        <!-- <td rowspan="2">100</td> -->
+      </tr>
+      <tr align="center">
+        <td>손오공</td>
+        <!-- <td>95</td> -->
+        <!-- <td>100</td> -->
+      </tr>
+    </table>
+  </body>
+</html>

@@ -16,3 +16,51 @@ h1 {
 h2 {
   color: var(--p-light);
 }
+
+div .class1 {
+  background-color: lightblue;
+  position: absolute;
+  z-index: 6;
+  top: 50px;
+  left: 150px;
+  width: 200px;
+  height: 100px;
+  padding: 10px;
+  display: block;
+}
+
+div .class1:hover {
+  display: none;
+}
+
+div .class2 {
+  background-color: pink;
+  position: absolute;
+  z-index: 4;
+  left: 50px;
+  width: 200px;
+  height: 100px;
+  padding: 10px;
+}
+
+table,
+th,
+td {
+  border-collapse: collapse;
+  border: 1px solid var(--p-dark);
+  padding: 5px;
+  font-size: 9pt;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+table caption {
+  color: var(--p-primary);
+}
+
+table th {
+  width: 100px;
+}
+
+.head {
+  background-color: var(--p-light);
+}
