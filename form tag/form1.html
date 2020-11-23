@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <center>
+      <!-- 입력양식을 위한 form tag -->
+      <form
+        name="memRegForm"
+        action="http://www.kosmo.com/memRegForm.do"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+        <table>
+          <caption>
+            User Information
+          </caption>
+          <tr>
+            <th>User ID</th>
+            <td class="uid">
+              <input
+                type="text"
+                name="uid"
+                maxlength="10"
+                value="input your id"
+              />
+            </td>
+          </tr>
+          <tr>
+            <th>Password</th>
+            <td>
+              <input type="password" name="pwd" value="" maxlength="10" />
+            </td>
+          </tr>
+          <tr>
+            <th>phone</th>
+            <td>
+              <input type="text" name="phone_num" maxlength="15" />
+            </td>
+          </tr>
+          <tr>
+            <th>Skills</th>
+            <!-- 체크박스로 보낸 데이터는 웹서버에서 배열로 받는다 -->
+            <td><input type="checkbox" name="skill" value="JSP" />JSP</td>
+            <td><input type="checkbox" name="skill" value="ASP" />ASP</td>
+            <td><input type="checkbox" name="skill" value="PHP" />PHP</td>
+          </tr>
+          <tr>
+            <th>학력</th>
+            <td>
+              <input type="radio" name="school" id="" value="1" /> 중졸
+              <input type="radio" name="school" id="" value="2" /> 고졸
+              <input type="radio" name="school" id="" value="3" /> 대졸
+            </td>
+          </tr>
+          <tr>
+            <th>종교</th>
+            <td>
+              <select name="religion" id="">
+                <option value="">--선택--</option>
+                <option value="불교">불교</option>
+                <option value="개신교">개신교</option>
+                <option value="천주교">천주교</option>
+                <option value="이슬람교">이슬람교</option>
+                <option value="무교">무교</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <th>Picture</th>
+            <td>
+              <input type="file" name="pic" id="" />
+            </td>
+          </tr>
+          <tr>
+            <th>자기소개</th>
+            <td>
+              <textarea name="introduce" id="" cols="30" rows="10"></textarea>
+            </td>
+          </tr>
+        </table>
+        <div>
+          <!-- Button의 value 는 서버로 전송되지 않는다. -->
+          <input type="button" value="Save" onclick="checkMemForm();" />
+          <input type="reset" value="init" />
+
+          <!-- 화면에 보이고 싶진 않지만 서버로는 보내고 싶은 데이터 -->
+          <input type="hidden" name="mem_no" value="11" />
+        </div>
+      </form>
+    </center>
+    <script type="text/javascript" src="function.js"></script>
+  </body>
+</html>
