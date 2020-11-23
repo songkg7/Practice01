@@ -21,7 +21,7 @@ function checkMemForm() {
   // 전화번호 유효성 체크
   const phone = document.memRegForm.phone_num.value;
   const regExpPN = new RegExp(/^\d{9,11}$/);
-  if (regExpPN.test(phone) == false) {
+  if (regExpPN.test(phone) === false) {
     alert("옳은 전화번호 형식이 아닙니다.");
     return;
   }
