@@ -22,7 +22,7 @@ function checkMemForm() {
   const phone = document.memRegForm.phone_num.value;
   const regExpPN = new RegExp(/^\d{9,11}$/);
   if (regExpPN.test(phone) == false) {
-    alert("올바른 전화번호 형식이 아닙니다.");
+    alert("옳은 전화번호 형식이 아닙니다.");
     return;
   }
 }
