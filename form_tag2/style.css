@@ -1,0 +1,67 @@
+:root {
+  --P-color: gray;
+  --L-color: lightgray;
+  --D-color: gray;
+  --L-font: 27px;
+  --M-font: 14px;
+  --S-font: 10px;
+}
+
+div {
+  padding: 10px;
+}
+
+table {
+  font-family: Roboto, sans-serif, serif;
+  border-collapse: collapse;
+  border: 2px solid var(--P-color);
+}
+
+caption {
+  /* background-color: var(--D-color); */
+  font-size: var(--M-font);
+  /* color: white; */
+}
+
+tr {
+  /* background-color: var(--L-color); */
+  height: 30px;
+  border: 1px solid var(--P-color);
+}
+
+tr.darkgray {
+  background-color: var(--D-color);
+  color: white;
+}
+
+th {
+  background-color: var(--P-color);
+  padding: 5px;
+}
+
+td {
+  padding: 5px;
+  border: 1px solid var(--P-color);
+  font-size: var(--M-font);
+  /* background-color: var(--L-color); */
+}
+
+td span {
+  color: orange;
+}
+
+td.uid {
+  padding: 0px;
+}
+
+td.row1 {
+  /* border-right: 1px solid var(--P-color); */
+  background-color: var(--L-color);
+}
+
+td input {
+  /* height: 25px; */
+  border: 1px solid var(--P-color);
+  /* padding: 0px 5px; */
+  vertical-align: middle;
+}
