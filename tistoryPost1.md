@@ -1,11 +1,19 @@
-// 중복된 데이터 제거하기1
-// Set 을 활용하여 간단하게 해결할 수 있다.
-// const num = [2, 4, 5, 6, 6, 7, 8, 9, 3, 4, 2];
-// const result1 = [...new Set(num)];
-// console.log(result1.sort((a, b) => a - b));
-// ----------------------------------------------------
+# 중복된 데이터
+
+## JavaScript
+
+### 주어진 배열에서 중복된 데이터의 값을 찾아 그 갯수가 많은 순서대로 정렬하세요.
+
+- 파일이름은 READ ME 입니다.
+- 조건2
+- 조건3
+
+**마크다운형식**으로 작성된 문서입니다.
+
+```javascript
 // 중복된 데이터 제거하기2
 // 각각의 값이 몇 번 반복되는지 체크
+
 const num = [6, 5, 7, 8, 6, 6, 5, 4, 2, 6, 8, 9, 4, 6, 9, 9, 10, 1, 3, 2, 2, 4];
 const result = [];
 let count = 0;
@@ -27,7 +35,7 @@ for (let i = 0; i < num.length - 1; i++) {
         break;
       }
     }
-    // Index 0 ~ num[num.length-2] 까지 체크
+    // Index 0번부터 ~ num[num.length-2] 까지 체크
     if (num[i] === num[j]) {
       count++;
       break;
@@ -39,18 +47,7 @@ for (let i = 0; i < num.length - 1; i++) {
     }
   }
 }
-
+// 정답 출력
 const answer = result.sort((a, b) => b.count - a.count)[0];
 console.log(answer);
-
-// // 최대값은 num[num.length-1]
-// // 언제까지? num.length 가 0 이 될때까지
-// // 숫자를 앞에서부터 하나씩 찾아서 shift
-// // console.log(num.indexOf(num[num.length - 1]));
-// const result2 = [];
-// let count2 = 0;
-// for (let i = 0; i < num.length - 1; i++) {
-//   for (let j = num[0]; j < num[num.length - 1]; j++) {}
-// }
-
-// console.log(result2);
+```
