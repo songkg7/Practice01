@@ -113,8 +113,8 @@ function getGradeInfo(stu_name, kor, eng, mat) {
 // document.writeln(`</table>`);
 
 let limit_count = 3;
-var id_error_count = 0;
-var pwd_error_count = 0;
+let id_error_count = 0;
+let pwd_error_count = 0;
 
 function check_id() {
   let id = prompt("input your id", "");
