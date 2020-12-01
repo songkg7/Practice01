@@ -1,24 +1,7 @@
 function timeForm() {
   // 요일을 구분하는 함수를 정의
   function getWeeks(weekNo) {
-    switch (weekNo) {
-      case 0:
-        return '일';
-      case 1:
-        return '월';
-      case 2:
-        return '화';
-      case 3:
-        return '수';
-      case 4:
-        return '목';
-      case 5:
-        return '금';
-      case 6:
-        return '토';
-      default:
-        return null;
-    }
+    return ['일', '월', '화', '수', '목', '금', '토'][weekNo];
   }
 
   // 필요한 변수 선언
@@ -79,4 +62,4 @@ function getIntervalDate(date1, date2) {
   return result;
 }
 
-console.log(getIntervalDate(date1, date2));
+console.log(getIntervalDate(date1, date2) + '일');
