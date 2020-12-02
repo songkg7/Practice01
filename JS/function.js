@@ -1,3 +1,25 @@
+// 주어진 배열 안에 data와 중복이 있는지 검사하는 함수
+function isOfArr(arrObj, data) {
+  return arrObj.includes(data);
+}
+
+function getRandomNum(minNum, maxNum) {
+  return Math.floor(Math.random() * (maxNum - minNum + 1) + minNum);
+}
+
+function getRandomNumArr(minNum, maxNum, n) {
+  const arr = [];
+  while (arr.length < n) {
+    const randomNo = getRandomNum(minNum, maxNum);
+    if (isOfArr(arr, randomNo) === false) {
+      arr.push(randomNo);
+    }
+  }
+  arr.sort((a, b) => a - b);
+  return arr;
+}
+console.log(getRandomNumArr(1, 45, 6));
+
 function timeForm() {
   // 요일을 구분하는 함수를 정의
   function getWeeks(weekNo) {
