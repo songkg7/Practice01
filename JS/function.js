@@ -3,10 +3,12 @@ function isOfArr(arrObj, data) {
   return arrObj.includes(data);
 }
 
+// 범위 안의 난수를 하나 리턴하는 함수
 function getRandomNum(minNum, maxNum) {
   return Math.floor(Math.random() * (maxNum - minNum + 1) + minNum);
 }
 
+// 범위 안의 난수를 n개 배열로 받는 함수
 function getRandomNumArr(minNum, maxNum, n) {
   const arr = [];
   while (arr.length < n) {
