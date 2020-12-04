@@ -3,6 +3,7 @@ function timeForm() {
     function getWeeks(weekNo) {
         return ['일', '월', '화', '수', '목', '금', '토'][weekNo];
     }
+    var nowTime = document.getElementById('nowTime');
     var today = new Date();
     var year = today.getFullYear();
     var month = today.getMonth() + 1;
@@ -17,14 +18,24 @@ function timeForm() {
         hour -= 12;
     }
     var result = year + "\uB144 " + month + "\uC6D4 " + date + "\uC77C " + week + "\uC694\uC77C " + isAM + " " + hour + "\uC2DC " + minute + "\uBD84 " + sec + "\uCD08";
-    document.getElementById('nowTime').innerHTML = result;
+    if (nowTime !== null) {
+        nowTime.innerHTML = result;
+    }
 }
-function timer() {
-    document.getElementById('second').innerHTML = '5';
-    location.href = 'http://www.naver.com';
+function timer(time) {
+    var second = document.getElementById('second');
+    if (second !== null) {
+        second.innerHTML = "" + time;
+        window.setInterval(function () {
+            second.innerHTML = "" + --time;
+            if (time === 0) {
+                location.href = 'http://www.naver.com';
+            }
+        }, 1000);
+    }
 }
 window.onload = function () {
-    window.setInterval(function () { return timer(); }, 5 * 1000);
+    timer(5);
     window.setInterval(function () { return timeForm(); }, 1 * 1000);
 };
 //# sourceMappingURL=script.js.map

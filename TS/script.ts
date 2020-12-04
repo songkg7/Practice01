@@ -5,6 +5,7 @@ function timeForm(): void {
   }
 
   // 필요한 변수 선언
+  const nowTime = document.getElementById('nowTime');
   const today = new Date();
   const year = today.getFullYear();
   let month = today.getMonth() + 1;
@@ -37,19 +38,29 @@ function timeForm(): void {
   //   }
 
   const result = `${year}년 ${month}월 ${date}일 ${week}요일 ${isAM} ${hour}시 ${minute}분 ${sec}초`;
-
-  document.getElementById('nowTime').innerHTML = result;
+  if (nowTime !== null) {
+    nowTime.innerHTML = result;
+  }
   //   return result;
 }
 
-function timer(): void {
-  document.getElementById('second').innerHTML = '5';
-  location.href = 'http://www.naver.com';
+function timer(time: number): void {
+  const second = document.getElementById('second');
+
+  if (second !== null) {
+    second.innerHTML = `${time}`;
+    window.setInterval(function () {
+      second.innerHTML = `${--time}`;
+      if (time === 0) {
+        location.href = 'http://www.naver.com';
+      }
+    }, 1000);
+  }
 }
 
 // function startTime() {}
 
 window.onload = function () {
-  window.setInterval(() => timer(), 5 * 1000);
+  timer(5);
   window.setInterval(() => timeForm(), 1 * 1000);
 };
