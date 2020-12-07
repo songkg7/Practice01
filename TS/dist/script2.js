@@ -17,16 +17,22 @@ function checkId() {
     }
 }
 function checkPwd() {
-    checkPattern(document.getElementById('pwd'), /^\w{5,9}$/, 'Password의 형식이 다릅니다.');
+    var pwd = document.getElementById('pwd');
+    var value = pwd.value;
+    if (value === '') {
+        console.log('Password를 입력해주세요.');
+    }
+    else {
+        checkPattern(pwd, /^\w{5,9}$/, 'Password의 형식이 다릅니다.');
+    }
 }
 function confirmPwd() {
     var checkPwd = document.getElementById('checkPwd');
-    var regExp = /^\w{5,9}$/;
-    if (regExp.test(checkPwd.value) === false) {
-        console.log('Password가 일치하지 않습니다.');
-        checkPwd.value = '';
-        checkPwd.focus();
+    var value = checkPwd.value;
+    if (value === '') {
+        console.log('Password를 확인해주세요.');
     }
+    checkPattern(checkPwd, /^\w{5,9}$/, 'Password가 일치하지 않습니다.');
 }
 function checkBoxCnt() {
     var skill = document.getElementsByName('skill');

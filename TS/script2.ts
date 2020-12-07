@@ -11,7 +11,7 @@ function checkPattern(val: any, regExp: any, msg: string): void {
 
 function checkId(): void {
   const uid = <HTMLInputElement>document.getElementById('uid');
-  const value = uid.value;
+  const { value } = uid;
   if (value === '') {
     console.log('ID를 입력해주세요.');
   } else {
@@ -20,22 +20,24 @@ function checkId(): void {
 }
 
 function checkPwd(): void {
-  checkPattern(
-    <HTMLInputElement>document.getElementById('pwd'),
-    /^\w{5,9}$/,
-    'Password의 형식이 다릅니다.',
-  );
+  const pwd = <HTMLInputElement>document.getElementById('pwd');
+  const { value } = pwd;
+  if (value === '') {
+    console.log('Password를 입력해주세요.');
+  } else {
+    checkPattern(pwd, /^\w{5,9}$/, 'Password의 형식이 다릅니다.');
+  }
 }
 
 // pwd confirm
 function confirmPwd(): void {
   const checkPwd = <HTMLInputElement>document.getElementById('checkPwd');
-  const regExp = /^\w{5,9}$/;
-  if (regExp.test(checkPwd.value) === false) {
-    console.log('Password가 일치하지 않습니다.');
-    checkPwd.value = '';
-    checkPwd.focus();
+  const { value } = checkPwd;
+  if (value === '') {
+    console.log('Password를 확인해주세요.');
   }
+  // pwd 의 정규식 패턴이 변경될 경우 수정시 에러날 확률이 높으므로 코드 수정 필요
+  checkPattern(checkPwd, /^\w{5,9}$/, 'Password가 일치하지 않습니다.');
 }
 
 // checkbox validation
@@ -68,7 +70,7 @@ function checkGraduate(): void {
 // address validation
 function checkAddress(): void {
   const addr = <HTMLInputElement>document.getElementById('addr');
-  const value = addr.value;
+  const { value } = addr;
   if (value === '') {
     console.log('주소지를 선택해주세요.');
   }
@@ -77,7 +79,7 @@ function checkAddress(): void {
 // birthday validation (HTML5)
 function checkBirth(): void {
   const date = <HTMLInputElement>document.getElementById('birthday');
-  const value = date.value;
+  const { value } = date;
   if (value === '') {
     console.log('생일을 선택해주세요.');
   }

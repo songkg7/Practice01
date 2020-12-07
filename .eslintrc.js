@@ -4,15 +4,24 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 12,
   },
+  parser: '@typescript-eslint/parser',
+
   env: {
     browser: true,
+    es6: true,
     node: true,
   },
   globals: {
     _: false,
   },
-  extends: 'airbnb-base',
-  plugins: ['import', 'html'],
+  extends: [
+    'airbnb-base',
+    'plugin:@typescript-eslint/eslint-recommended',
+    'prettier/react',
+    'eslint:recommended',
+    'plugin:prettier/recommended',
+  ],
+  plugins: ['import', 'html', '@typescript-eslint'],
   rules: {
     // "off" or 0 - turn the rule off
     // "warn" or 1 - turn the rule on as a warning (doesn’t affect exit code)
