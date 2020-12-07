@@ -1,0 +1,68 @@
+:root {
+  --P-color: ;
+}
+
+.xxx,
+.xxx th,
+.xxx td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  padding: 5px;
+  font-size: 9pt;
+  margin: 5px;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+th {
+  background-color: lightgray;
+}
+
+.table {
+  border: 1px solid black;
+  padding: 5px;
+  display: inline-block;
+}
+
+.space {
+  height: 30px;
+}
+
+.title_bar {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  text-align: center;
+  border-radius: 10px;
+  color: white;
+  background-color: black;
+  width: 100%;
+  height: 30px;
+}
+
+/* 좋은 가운데정렬 방법이 아님 */
+.title_bar div {
+  /* margin: auto; */
+  padding-top: 7px;
+}
+
+.title_bar div:hover {
+  background-color: gray;
+  border-radius: 10px;
+}
+
+/* db_table  */
+.db_table tr td {
+  height: 30px;
+  width: 20%;
+  text-align: center;
+  border: 1px solid gray;
+  border-left: 0;
+  border-right: 0;
+}
+
+.db_table .row1 {
+  background-color: darkgray;
+}

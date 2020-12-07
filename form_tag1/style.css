@@ -1,0 +1,49 @@
+:root {
+  --P-color: #60b4f4;
+  --L-color: #97e6ff;
+  --D-color: #1985c1;
+  --L-font: 27px;
+  --M-font: 14px;
+  --S-font: 10px;
+}
+
+div {
+  padding: 10px;
+}
+
+table {
+  font-family: Roboto, sans-serif, serif;
+  border-collapse: collapse;
+  /* border: 2px solid var(--P-color); */
+}
+
+caption {
+  background-color: var(--D-color);
+  font-size: var(--L-font);
+  color: white;
+}
+
+tr {
+  background-color: var(--L-color);
+}
+
+th {
+  background-color: var(--P-color);
+  padding: 5px;
+}
+
+td {
+  display: inline;
+  font-size: var(--M-font);
+}
+
+td.uid {
+  padding: 0px;
+}
+
+td input {
+  height: 25px;
+  border: 0px;
+  padding: 0px 5px;
+  vertical-align: middle;
+}
