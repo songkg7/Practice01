@@ -18,6 +18,7 @@ module.exports = {
     // "warn" or 1 - turn the rule on as a warning (doesn’t affect exit code)
     // "error" or 2 - turn the rule on as an error (exit code is 1 when triggered)
     // "no-var": 0,
+    'linebreak-style': 0,
     'no-console': 0,
     'no-plusplus': 0,
     'no-shadow': 0,

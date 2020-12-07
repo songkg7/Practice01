@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <center>
+      <form action="" name="memberRegForm">
+        <table cellpadding="5px">
+          <caption>
+            회원가입
+          </caption>
+          <tr>
+            <th>아이디</th>
+            <td>
+              <input id="uid" type="text" name="uid" size="20" maxlength="15" value="" />
+            </td>
+          </tr>
+          <tr>
+            <th>비밀번호</th>
+            <td>
+              <input
+                id="pwd"
+                type="password"
+                name="pwd"
+                size="20"
+                maxlength="8"
+                value=""
+              />
+            </td>
+          </tr>
+          <tr>
+            <th>비밀번호확인</th>
+            <td>
+              <input
+                id="checkPwd"
+                type="password"
+                name="checkPwd"
+                size="20"
+                maxlength="8"
+                value=""
+              />
+            </td>
+          </tr>
+          <tr>
+            <th>보유스킬</th>
+            <td>
+              <input type="checkbox" name="skill" value="JSP" checked />JSP
+              <input type="checkbox" name="skill" value="Java" />Java
+              <input type="checkbox" name="skill" value="Spring" />Spring
+              <input type="checkbox" name="skill" value="Oracle" checked />Oracle
+              <input type="checkbox" name="skill" value="mybatis" />mybatis
+            </td>
+          </tr>
+          <tr>
+            <th>최종학력</th>
+            <td>
+              <input type="radio" name="school" value="고졸" />고졸
+              <input type="radio" name="school" value="전문대졸" />전문대졸
+              <input type="radio" name="school" value="일반대졸" />일반대졸
+            </td>
+          </tr>
+          <tr>
+            <th>주소지</th>
+            <td>
+              <select id="addr" name="addr">
+                <option value="">--선택--</option>
+                <option value="서울">서울</option>
+                <option value="경기">경기</option>
+                <option value="인천">인천</option>
+                <option value="전라도">전라도</option>
+                <option value="경상도">경상도</option>
+                <option value="부산">부산</option>
+                <option value="충청도">충청도</option>
+                <option value="제주도">제주도</option>
+                <option value="기타">기타</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <th>생일</th>
+            <td>
+              <input type="date" name="birthday" id="birthday" min="1900-01-01" />
+            </td>
+          </tr>
+        </table>
+      </form>
+      <button type="button" id="saveBt">save</button>
+    </center>
+    <!-- <script src="script2.js"></script> -->
+    <script src="dist/script2.js"></script>
+    <!-- <script src="dist/function.js"></script> -->
+  </body>
+</html>
