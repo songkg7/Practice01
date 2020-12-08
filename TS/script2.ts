@@ -1,7 +1,7 @@
 // https://heropy.blog/2020/01/27/typescript/ 문제해결 참고
 
 // pattern validation
-function checkPattern(val: any, regExp: any, msg: string): void {
+function checkPattern(val: any, regExp: RegExp, msg: string): void {
   if (regExp.test(val.value) === false) {
     console.log(msg);
     val.value = '';
@@ -40,29 +40,37 @@ function confirmPwd(): void {
   checkPattern(checkPwd, /^\w{5,9}$/, 'Password가 일치하지 않습니다.');
 }
 
-// checkbox validation
-// 2개 이상 체크되도록 할 것
-function checkBoxCnt(): number {
-  const skill: any = document.getElementsByName('skill');
+function getCheckCnt(arr: any): number {
   let cnt = 0;
-  for (let i = 0; i < skill.length; i++) {
-    if (skill[i].checked === true) {
+  // 일반 반복문
+  // for (let i = 0; i < arr.length; i++) {
+  //   if (arr[i].checked === true) {
+  //     cnt++;
+  //   }
+  // }
+
+  // forEach문
+  arr.forEach((item: { checked: boolean }) => {
+    if (item.checked === true) {
       cnt++;
     }
-  }
+  });
   return cnt;
+}
+
+// checkbox validation
+// 2개 이상 체크되도록 할 것
+function checkBoxCnt(): void {
+  const skill: any = document.getElementsByName('skill');
+  if (getCheckCnt(skill) < 2) {
+    console.log('스킬은 두개 이상 체크해야합니다.');
+  }
 }
 
 // graduate validation
 function checkGraduate(): void {
   const school: any = document.getElementsByName('school');
-  let cnt = 0;
-  for (let i = 0; i < school.length; i++) {
-    if (school[i].checked === true) {
-      cnt++;
-    }
-  }
-  if (cnt !== 1) {
+  if (getCheckCnt(school) !== 1) {
     console.log('학력은 반드시 체크해야합니다.');
   }
 }
@@ -82,20 +90,47 @@ function checkBirth(): void {
   const { value } = date;
   if (value === '') {
     console.log('생일을 선택해주세요.');
+  } else {
+    const regNum = <HTMLInputElement>document.getElementById('firstRegNum');
+    // 정규식 패턴을 좀 더 공부하면 코드를 줄일 수 있다.
+    regNum.value = value.replace(/^\d{2}/, '').replace(/-/g, '');
   }
 }
 
+// picture validation
+function checkPic(): void {
+  const picture = <HTMLInputElement>document.getElementById('pic');
+  const { value } = picture;
+  if (value === '') {
+    console.log('파일 선택은 필수입니다.');
+  }
+}
+
+// notice validation
+function checkNotice(): void {
+  const notice = <HTMLInputElement>document.getElementById('notice');
+  if (!notice.checked) {
+    console.log('숙지사항에 체크해주세요.');
+  }
+}
+
+// Last validity
 function checkForm(): void {
   checkId();
   checkPwd();
   confirmPwd();
-  if (checkBoxCnt() < 2) {
-    console.log('스킬은 2개 이상 체크해야합니다.');
-  }
+  checkBoxCnt();
   checkGraduate();
   checkAddress();
   checkBirth();
+  checkPic();
+  checkNotice();
 }
+
+const selectDate = document.getElementById('birthday');
+selectDate!.onchange = function () {
+  checkBirth();
+};
 
 // result
 const button = document.getElementById('saveBt');

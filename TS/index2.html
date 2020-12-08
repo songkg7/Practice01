@@ -9,7 +9,7 @@
   <body>
     <center>
       <form action="" name="memberRegForm">
-        <table cellpadding="5px">
+        <table cellpadding="5">
           <caption>
             회원가입
           </caption>
@@ -84,6 +84,34 @@
             <th>생일</th>
             <td>
               <input type="date" name="birthday" id="birthday" min="1900-01-01" />
+            </td>
+          </tr>
+          <tr>
+            <th>주민번호</th>
+            <td>
+              <input
+                type="text"
+                id="firstRegNum"
+                placeholder="생년월일선택"
+                name=""
+                maxlength="6"
+                readonly
+              />
+              -
+              <input type="text" name="" maxlength="7" id="lastRegNum" />
+            </td>
+          </tr>
+          <tr>
+            <th>사진</th>
+            <td>
+              <input type="file" name="pic" id="pic" />
+            </td>
+          </tr>
+          <tr>
+            <th>숙지사항</th>
+            <td>
+              입력하신 개인정보는 회사 소유입니다.
+              <input type="checkbox" id="notice" value="확인" />확인
             </td>
           </tr>
         </table>

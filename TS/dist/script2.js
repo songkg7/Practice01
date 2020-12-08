@@ -34,25 +34,24 @@ function confirmPwd() {
     }
     checkPattern(checkPwd, /^\w{5,9}$/, 'Password가 일치하지 않습니다.');
 }
-function checkBoxCnt() {
-    var skill = document.getElementsByName('skill');
+function getCheckCnt(arr) {
     var cnt = 0;
-    for (var i = 0; i < skill.length; i++) {
-        if (skill[i].checked === true) {
+    arr.forEach(function (item) {
+        if (item.checked === true) {
             cnt++;
         }
-    }
+    });
     return cnt;
+}
+function checkBoxCnt() {
+    var skill = document.getElementsByName('skill');
+    if (getCheckCnt(skill) < 2) {
+        console.log('스킬은 두개 이상 체크해야합니다.');
+    }
 }
 function checkGraduate() {
     var school = document.getElementsByName('school');
-    var cnt = 0;
-    for (var i = 0; i < school.length; i++) {
-        if (school[i].checked === true) {
-            cnt++;
-        }
-    }
-    if (cnt !== 1) {
+    if (getCheckCnt(school) !== 1) {
         console.log('학력은 반드시 체크해야합니다.');
     }
 }
@@ -69,18 +68,39 @@ function checkBirth() {
     if (value === '') {
         console.log('생일을 선택해주세요.');
     }
+    else {
+        var regNum_1 = document.getElementById('firstRegNum');
+        regNum_1.value = value.replace(/^\d{2}/, '').replace(/-/g, '');
+    }
+}
+function checkPic() {
+    var picture = document.getElementById('pic');
+    var value = picture.value;
+    if (value === '') {
+        console.log('파일 선택은 필수입니다.');
+    }
+}
+function checkNotice() {
+    var notice = document.getElementById('notice');
+    if (!notice.checked) {
+        console.log('숙지사항에 체크해주세요.');
+    }
 }
 function checkForm() {
     checkId();
     checkPwd();
     confirmPwd();
-    if (checkBoxCnt() < 2) {
-        console.log('스킬은 2개 이상 체크해야합니다.');
-    }
+    checkBoxCnt();
     checkGraduate();
     checkAddress();
     checkBirth();
+    checkPic();
+    checkNotice();
 }
+var selectDate = document.getElementById('birthday');
+selectDate.onchange = function () {
+    checkBirth();
+};
 var button = document.getElementById('saveBt');
 button.onclick = function () {
     checkForm();
