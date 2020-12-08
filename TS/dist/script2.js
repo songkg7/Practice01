@@ -80,6 +80,28 @@ function checkPic() {
         console.log('파일 선택은 필수입니다.');
     }
 }
+function checkCarrier() {
+    var companyName = document.getElementsByName('companyName')[0];
+    var rank = document.getElementsByName('rank')[0];
+    var salary = document.getElementsByName('salary')[0];
+    var regExp = /^[1-9]\d*$/;
+    if (salary.value !== '' && !regExp.test(salary.value)) {
+        console.log('연봉은 숫자만 입력가능합니다.');
+        return false;
+    }
+    if (companyName.value === '' && rank.value === '' && salary.value === '') {
+        return true;
+    }
+    if (companyName.value !== '' && salary.value !== '') {
+        return true;
+    }
+    if (rank.value !== '') {
+        if (companyName.value !== '' && salary.value !== '') {
+            return true;
+        }
+    }
+    return false;
+}
 function checkNotice() {
     var notice = document.getElementById('notice');
     if (!notice.checked) {
@@ -95,6 +117,7 @@ function checkForm() {
     checkAddress();
     checkBirth();
     checkPic();
+    console.log(checkCarrier());
     checkNotice();
 }
 var selectDate = document.getElementById('birthday');

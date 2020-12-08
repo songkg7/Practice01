@@ -106,6 +106,38 @@ function checkPic(): void {
   }
 }
 
+// carrier validation (모두 비거나, 회사명 and 연봉만 채우거나 직급을 선택했다면 회사명과 연봉도 작성해야한다)
+function checkCarrier(): boolean {
+  const companyName = <HTMLInputElement>document.getElementsByName('companyName')[0];
+  const rank = <HTMLInputElement>document.getElementsByName('rank')[0];
+  const salary = <HTMLInputElement>document.getElementsByName('salary')[0];
+
+  // salary regExp validity
+  const regExp = /^[1-9]\d*$/;
+  if (salary.value !== '' && !regExp.test(salary.value)) {
+    console.log('연봉은 숫자만 입력가능합니다.');
+    return false;
+  }
+  // rules
+  // 셋 다 공백이면 true
+  if (companyName.value === '' && rank.value === '' && salary.value === '') {
+    return true;
+  }
+
+  // 회사명과 연봉이 입력되어 있다면 true
+  if (companyName.value !== '' && salary.value !== '') {
+    return true;
+  }
+
+  // 직급이 입력되어있는데 회사명과 연봉이 있다면 true
+  if (rank.value !== '') {
+    if (companyName.value !== '' && salary.value !== '') {
+      return true;
+    }
+  }
+  return false;
+}
+
 // notice validation
 function checkNotice(): void {
   const notice = <HTMLInputElement>document.getElementById('notice');
@@ -124,6 +156,7 @@ function checkForm(): void {
   checkAddress();
   checkBirth();
   checkPic();
+  console.log(checkCarrier());
   checkNotice();
 }
 
