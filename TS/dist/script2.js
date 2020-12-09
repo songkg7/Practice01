@@ -69,8 +69,8 @@ function checkBirth() {
         console.log('생일을 선택해주세요.');
     }
     else {
-        var regNum_1 = document.getElementById('firstRegNum');
-        regNum_1.value = value.replace(/^\d{2}/, '').replace(/-/g, '');
+        var regNum = document.getElementById('firstRegNum');
+        regNum.value = value.replace(/^\d{2}/, '').replace(/-/g, '');
     }
 }
 function checkPic() {
