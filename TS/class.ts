@@ -31,7 +31,7 @@ class Student {
     return avg;
   }
 
-  getGrade(): string {
+  getGrade() {
     const avg = this.getAvg();
     if (avg >= 90) {
       return 'A';
@@ -48,6 +48,7 @@ class Student {
     return 'F';
   }
 }
+
 // 전체평균 구하기
 function totAvg(arr: Student[]): number {
   let tot: number = 0;
@@ -57,7 +58,7 @@ function totAvg(arr: Student[]): number {
   return tot / arr.length;
 }
 
-function buildTable(data: Student[]): void {
+function buildMainTable(data: Student[]): void {
   const table = <HTMLElement>document.getElementById('table1');
   let color: string = '';
   let rank: number = 0;
@@ -92,24 +93,80 @@ function buildTable(data: Student[]): void {
       rank = 1;
     }
 
-    const row = `<tr bgcolor=${color}>
-    <td name="rank">${rank}</td>
-    <td>${data[i].getStuNo()}</td>
-    <td>${data[i].kor}</td>
-    <td>${data[i].eng}</td>
-    <td>${data[i].mat}</td>
-    <td>${data[i].getTot()}</td>
-    <td>${data[i].getAvg().toFixed(2)}</td>
-    <td>${data[i].getGrade()}</td>
-    <td>${(data[i].getAvg() - totAvg(data)).toFixed(2)}</td>
+    const row = `
+      <tr bgcolor=${color}>
+        <td name="rank">${rank}</td>
+        <td>${data[i].getStuNo()}</td>
+        <td>${data[i].kor}</td>
+        <td>${data[i].eng}</td>
+        <td>${data[i].mat}</td>
+        <td>${data[i].getTot()}</td>
+        <td>${data[i].getAvg().toFixed(2)}</td>
+        <td>${data[i].getGrade()}</td>
+        <td>${(data[i].getAvg() - totAvg(data)).toFixed(2)}</td>
       </tr>`;
     table!.innerHTML += row;
   }
 }
 
-const student1 = new Student(1, 100, 100, 100);
-const student2 = new Student(2, 100, 100, 100);
-const student3 = new Student(3, 100, 100, 100);
+function buildSubTable(data: Student[]): void {
+  const table = <HTMLElement>document.getElementById('table2');
+  let aCnt: number = 0;
+  let bCnt: number = 0;
+  let cCnt: number = 0;
+  let dCnt: number = 0;
+  let fCnt: number = 0;
+
+  for (const i of data) {
+    if (i.getGrade() === 'A') {
+      aCnt++;
+    }
+    if (i.getGrade() === 'B') {
+      bCnt++;
+    }
+    if (i.getGrade() === 'C') {
+      cCnt++;
+    }
+    if (i.getGrade() === 'D') {
+      dCnt++;
+    }
+    if (i.getGrade() === 'F') {
+      fCnt++;
+    }
+  }
+
+  const row = `
+    <tr>
+      <td>A</td>
+      <td>${aCnt}</td>
+      <td>${(aCnt / data.length) * 100}</td>
+    </tr>
+    <tr>
+      <td>B</td>
+      <td>${bCnt}</td>
+      <td>${(bCnt / data.length) * 100}</td>
+    </tr>
+    <tr>
+      <td>C</td>
+      <td>${cCnt}</td>
+      <td>${(cCnt / data.length) * 100}</td>
+    </tr>
+    <tr>
+      <td>D</td>
+      <td>${dCnt}</td>
+      <td>${(dCnt / data.length) * 100}</td>
+    </tr>
+    <tr>
+      <td>F</td>
+      <td>${fCnt}</td>
+      <td>${(fCnt / data.length) * 100}</td>
+    </tr>
+    `;
+  table!.innerHTML += row;
+}
+// const student1 = new Student(1, 100, 100, 100);
+// const student2 = new Student(2, 100, 100, 100);
+// const student3 = new Student(3, 100, 100, 100);
 
 // console.log('학번 : ' + student1.getStuNo());
 // console.log('평균 : ' + student1.getAvg().toFixed(2));
@@ -118,12 +175,12 @@ const student3 = new Student(3, 100, 100, 100);
 
 // 평균을 기준으로 내림차순 정렬
 const gradeArr: Student[] = [];
-gradeArr.push(student1);
-gradeArr.push(student2);
-gradeArr.push(student3);
+// gradeArr.push(student1);
+// gradeArr.push(student2);
+// gradeArr.push(student3);
 
 // insert dummy data
-for (let i = 0; i < 50; i++) {
+for (let i = 0; i < 200; i++) {
   const kor = Math.ceil(Math.random() * 100);
   const eng = Math.ceil(Math.random() * 100);
   const mat = Math.ceil(Math.random() * 100);
@@ -141,4 +198,5 @@ const result: Student[] = gradeArr.sort((a: Student, b: Student) => {
   return b.getAvg() - a.getAvg();
 });
 
-buildTable(result);
+buildMainTable(result);
+buildSubTable(result);

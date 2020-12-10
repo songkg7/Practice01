@@ -42,7 +42,7 @@ function totAvg(arr) {
     }
     return tot / arr.length;
 }
-function buildTable(data) {
+function buildMainTable(data) {
     var table = document.getElementById('table1');
     var color = '';
     var rank = 0;
@@ -72,18 +72,40 @@ function buildTable(data) {
         else if (i === 0) {
             rank = 1;
         }
-        var row = "<tr bgcolor=" + color + ">\n    <td name=\"rank\">" + rank + "</td>\n    <td>" + data[i].getStuNo() + "</td>\n    <td>" + data[i].kor + "</td>\n    <td>" + data[i].eng + "</td>\n    <td>" + data[i].mat + "</td>\n    <td>" + data[i].getTot() + "</td>\n    <td>" + data[i].getAvg().toFixed(2) + "</td>\n    <td>" + data[i].getGrade() + "</td>\n    <td>" + (data[i].getAvg() - totAvg(data)).toFixed(2) + "</td>\n      </tr>";
+        var row = "\n      <tr bgcolor=" + color + ">\n        <td name=\"rank\">" + rank + "</td>\n        <td>" + data[i].getStuNo() + "</td>\n        <td>" + data[i].kor + "</td>\n        <td>" + data[i].eng + "</td>\n        <td>" + data[i].mat + "</td>\n        <td>" + data[i].getTot() + "</td>\n        <td>" + data[i].getAvg().toFixed(2) + "</td>\n        <td>" + data[i].getGrade() + "</td>\n        <td>" + (data[i].getAvg() - totAvg(data)).toFixed(2) + "</td>\n      </tr>";
         table.innerHTML += row;
     }
 }
-var student1 = new Student(1, 100, 100, 100);
-var student2 = new Student(2, 100, 100, 100);
-var student3 = new Student(3, 100, 100, 100);
+function buildSubTable(data) {
+    var table = document.getElementById('table2');
+    var aCnt = 0;
+    var bCnt = 0;
+    var cCnt = 0;
+    var dCnt = 0;
+    var fCnt = 0;
+    for (var _i = 0, data_1 = data; _i < data_1.length; _i++) {
+        var i = data_1[_i];
+        if (i.getGrade() === 'A') {
+            aCnt++;
+        }
+        if (i.getGrade() === 'B') {
+            bCnt++;
+        }
+        if (i.getGrade() === 'C') {
+            cCnt++;
+        }
+        if (i.getGrade() === 'D') {
+            dCnt++;
+        }
+        if (i.getGrade() === 'F') {
+            fCnt++;
+        }
+    }
+    var row = "\n    <tr>\n      <td>A</td>\n      <td>" + aCnt + "</td>\n      <td>" + (aCnt / data.length) * 100 + "</td>\n    </tr>\n    <tr>\n      <td>B</td>\n      <td>" + bCnt + "</td>\n      <td>" + (bCnt / data.length) * 100 + "</td>\n    </tr>\n    <tr>\n      <td>C</td>\n      <td>" + cCnt + "</td>\n      <td>" + (cCnt / data.length) * 100 + "</td>\n    </tr>\n    <tr>\n      <td>D</td>\n      <td>" + dCnt + "</td>\n      <td>" + (dCnt / data.length) * 100 + "</td>\n    </tr>\n    <tr>\n      <td>F</td>\n      <td>" + fCnt + "</td>\n      <td>" + (fCnt / data.length) * 100 + "</td>\n    </tr>\n    ";
+    table.innerHTML += row;
+}
 var gradeArr = [];
-gradeArr.push(student1);
-gradeArr.push(student2);
-gradeArr.push(student3);
-for (var i = 0; i < 50; i++) {
+for (var i = 0; i < 200; i++) {
     var kor = Math.ceil(Math.random() * 100);
     var eng = Math.ceil(Math.random() * 100);
     var mat = Math.ceil(Math.random() * 100);
@@ -96,5 +118,6 @@ var result = gradeArr.sort(function (a, b) {
     }
     return b.getAvg() - a.getAvg();
 });
-buildTable(result);
+buildMainTable(result);
+buildSubTable(result);
 //# sourceMappingURL=class.js.map
