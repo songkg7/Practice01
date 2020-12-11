@@ -128,4 +128,4 @@ var button = document.getElementById('saveBt');
 button.onclick = function () {
     checkForm();
 };
-//# sourceMappingURL=script2.js.map
+//# sourceMappingURL=2_script.js.map

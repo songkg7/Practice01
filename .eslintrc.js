@@ -10,6 +10,8 @@ module.exports = {
     browser: true,
     es6: true,
     node: true,
+    // jquery 개발환경 허용
+    jquery: true,
   },
   globals: {
     _: false,
