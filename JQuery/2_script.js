@@ -75,37 +75,32 @@ function checkBoxCnt() {
 
 // graduate validation
 function checkGraduate() {
-  const { school } = document.memberRegForm;
-  let cnt = 0;
-  for (let i = 0; i < school.length; i++) {
-    if (school[i].checked === true) {
-      cnt++;
-    }
-  }
-  if (cnt !== 1) {
+  const schoolCnt = $('.school:checked').length;
+  if (schoolCnt !== 1) {
     console.log('학력은 반드시 체크해야합니다.');
   }
 }
 
 // address validation
 function checkAddress() {
-  const addr = document.memberRegForm.addr.value;
-  if (addr === '') {
+  const addr = $('.addr');
+  if (addr.val() === '') {
     console.log('주소지를 선택해주세요.');
   }
 }
 
 // birthday validation (HTML5)
 function checkBirth() {
-  const date = document.memberRegForm.birthday.value;
-  if (date === '') {
+  const date = $('.birthday');
+  if (date.val() === '') {
     console.log('생일을 선택해주세요.');
   }
 }
+
 function checkPic() {
-  const picture = document.getElementById('pic');
-  const { value } = picture;
-  if (value === '') {
+  const picture = $('.pic');
+  // const { value } = picture;
+  if (picture.val() === '') {
     console.log('파일 선택은 필수입니다.');
   }
 }
@@ -154,7 +149,11 @@ function checkForm() {
 }
 
 // result
-$(document).ready(() => $('.saveMember').click(() => checkForm()));
+// $(document).ready(() => $('.saveMember').click(() => checkForm()));
+// jQuery 3.0부터는 $(handler) 구문만 권장된다. 다른 구문은 여전히 작동하지만 더 이상 사용되지 않는다.
+$(() => $('.saveMember').click(() => checkForm()));
+// $(() => $('.saveMember').on('click', checkForm()));
+
 // saveBt 이라는 id를 가진 요소를 선택해서 onclick event 실행
 // const button = document.getElementById('saveBt');
 // button.onclick = () => {
