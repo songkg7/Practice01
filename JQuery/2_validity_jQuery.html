@@ -102,7 +102,7 @@
             <td>
               <input
                 type="text"
-                id="firstRegNum"
+                class="firstRegNum"
                 placeholder="생년월일선택"
                 name=""
                 maxlength="6"
@@ -121,26 +121,27 @@
           <tr>
             <th>경력</th>
             <td>
-              회사명<input type="text" name="companyName" /> 직급<select name="rank">
+              회사명<input type="text" class="companyName" /> 직급<select class="rank">
                 <option value="">--선택--</option>
                 <option value="과장">과장</option>
                 <option value="대리">대리</option>
                 <option value="주임">주임</option>
                 <option value="사원">사원</option>
               </select>
-              연봉<input type="text" name="salary" />
+              연봉<input type="text" class="salary" />
             </td>
           </tr>
           <tr>
             <th>숙지사항</th>
             <td>
               입력하신 개인정보는 회사 소유입니다.
-              <input type="checkbox" id="notice" value="확인" />확인
+              <input type="checkbox" class="notice" value="확인" />확인
             </td>
           </tr>
         </table>
+        <input type="reset" value="reset" />
+        <button type="button" id="saveBt" class="saveMember">save</button>
       </form>
-      <button type="button" id="saveBt" class="saveMember">save</button>
     </center>
     <script src="2_script.js"></script>
     <!-- <script src="dist/function.js"></script> -->

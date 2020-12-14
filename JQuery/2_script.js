@@ -94,6 +94,13 @@ function checkBirth() {
   const date = $('.birthday');
   if (date.val() === '') {
     console.log('생일을 선택해주세요.');
+  } else {
+    $('.firstRegNum').val(
+      date
+        .val()
+        .replace(/^\d{2}/, '')
+        .replace(/-/g, ''),
+    );
   }
 }
 
@@ -106,22 +113,22 @@ function checkPic() {
 }
 
 function checkCarrier() {
-  const companyName = document.getElementsByName('companyName')[0];
-  const rank = document.getElementsByName('rank')[0];
-  const salary = document.getElementsByName('salary')[0];
+  const companyName = $('.companyName');
+  const rank = $('.rank');
+  const salary = $('.salary');
   const regExp = /^[1-9]\d*$/;
-  if (salary.value !== '' && !regExp.test(salary.value)) {
+  if (salary.val() !== '' && !regExp.test(salary.val())) {
     console.log('연봉은 숫자만 입력가능합니다.');
     return false;
   }
-  if (companyName.value === '' && rank.value === '' && salary.value === '') {
+  if (companyName.val() === '' && rank.val() === '' && salary.val() === '') {
     return true;
   }
-  if (companyName.value !== '' && salary.value !== '') {
+  if (companyName.val() !== '' && salary.val() !== '') {
     return true;
   }
-  if (rank.value !== '') {
-    if (companyName.value !== '' && salary.value !== '') {
+  if (rank.val() !== '') {
+    if (companyName.val() !== '' && salary.val() !== '') {
       return true;
     }
   }
@@ -129,7 +136,7 @@ function checkCarrier() {
 }
 
 function checkNotice() {
-  const notice = document.getElementById('notice');
+  const notice = $('.notice')[0];
   if (!notice.checked) {
     console.log('숙지사항에 체크해주세요.');
   }
@@ -144,18 +151,22 @@ function checkForm() {
   checkAddress();
   checkBirth();
   checkPic();
-  checkCarrier();
+  if (!checkCarrier()) {
+    console.log('커리어의 입력양식을 지켜주세요.');
+  }
   checkNotice();
 }
 
 // result
 // $(document).ready(() => $('.saveMember').click(() => checkForm()));
 // jQuery 3.0부터는 $(handler) 구문만 권장된다. 다른 구문은 여전히 작동하지만 더 이상 사용되지 않는다.
-$(() => $('.saveMember').click(() => checkForm()));
-// $(() => $('.saveMember').on('click', checkForm()));
+$(() => $('.saveMember').on('click', () => checkForm()));
 
 // saveBt 이라는 id를 가진 요소를 선택해서 onclick event 실행
 // const button = document.getElementById('saveBt');
 // button.onclick = () => {
 //   checkForm();
 // };
+
+// onChange
+$('.birthday').on('change', () => checkBirth());
