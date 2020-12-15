@@ -41,7 +41,7 @@ function confirmPwd(): void {
 }
 
 function getCheckCnt(arr: any): number {
-  let cnt = 0;
+  let cnt: number = 0;
   // 일반 반복문
   // for (let i = 0; i < arr.length; i++) {
   //   if (arr[i].checked === true) {
@@ -113,7 +113,7 @@ function checkCarrier(): boolean {
   const salary = <HTMLInputElement>document.getElementsByName('salary')[0];
 
   // salary regExp validity
-  const regExp = /^[1-9]\d*$/;
+  const regExp: RegExp = /^[1-9]\d*$/;
   if (salary.value !== '' && !regExp.test(salary.value)) {
     console.log('연봉은 숫자만 입력가능합니다.');
     return false;
