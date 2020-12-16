@@ -1,0 +1,14 @@
+a {
+  text-decoration: none;
+  color: #cc0000;
+  font-style: italic;
+  font-weight: bold;
+}
+
+.tip {
+  background-color: #000000;
+  color: white;
+  position: absolute;
+  padding: 10px;
+  font-size: 12px;
+}

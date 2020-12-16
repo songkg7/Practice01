@@ -23,7 +23,9 @@ const answer = result.sort((a, b) => b.count - a.count);
 console.log(answer);
 
 // 중복제거1
-const res = answer.filter((val, index, arr) => index === arr.findIndex(t => t.num === val.num));
+const res = answer.filter(
+  (val, index, arr) => index === arr.findIndex(t => t.num === val.num),
+);
 console.log(res);
 
 // 중복제거2 (속성이 다르면 중복이라 체크하지 않는다)
