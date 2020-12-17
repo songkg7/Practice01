@@ -1,0 +1,185 @@
+<!--
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+jquery_09_searching.html
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	=>[검색 키워드]를 입력하고 [검색] 버튼 클릭하면 [검색 결과]만 화면에 보여준다.
+-->
+<html><meta charset="UTF-8">
+<head>
+	<style>.style1 { background-color: #00f; color: #fff; } </style>
+	<script src="jquery-1.11.0.min.js"></script>
+	<script>
+		$(document).ready(function () {
+		  //------------------------------------------
+		  // class=sungjuk 을 가진 태그를 관리하는 JQuery 객체의 메위주를 변수 obj 에 저장하기
+		  //------------------------------------------
+		  const obj = $('.sungjuk');
+		  //------------------------------------------
+		  // thead 태그 안의 tr 의 배경색을 lightblue 로 하기
+		  //------------------------------------------
+		  obj.find('thead tr').css({ 'background-color': 'lightblue' });
+		  //------------------------------------------
+		  // tbody 태그 안의 짝수행 tr 의 배경색을 gray 로 하기
+		  //------------------------------------------
+		  obj.find('tbody tr:odd').css({ 'background-color': 'gray' });
+		  //------------------------------------------
+		  // class=search 가진 태그에 click 이벤트가 일어나면
+		  // 키워드를 가지고 검색한 후 검색된 행만 보여주는 코딩 설정하기
+		  //------------------------------------------
+		  $('.search').click(function () {
+		    //----------------------------------------------
+		    // 입력된 키워드1 값을 얻어내어 변수에 저장
+		    let keyword1 = $('.keyword1').val();
+		    // 입력된 키워드2 값을 얻어내어 변수에 저장
+		    let keyword2 = $('.keyword2').val();
+		    // 선택된 or 또는 and 값을 얻어내어 변수에 저장
+		    const or_and = $('.or_and').val();
+
+		    const isKeyword1 = keyword1.split(' ').join('') != '';
+		    const isKeyword2 = keyword2.split(' ').join('') != '';
+		    //----------------------------------------------
+		    // 입력된 키워드1값과  키워드3값이 모두 공백 또는 비어 있으면 경고하고 키워드 비우고 검색 중지
+		    if (isKeyword1 == false && isKeyword2 == false) {
+		      alert('2개의 키워드 검색 데이터가 없습니다.');
+		      $('.keyword1').val('');
+		      $('.keyword2').val('');
+		      return;
+		    }
+		    //----------------------------------------------
+		    // keyword1 변수에 저장된 데이터의 앞뒤 공백을 제거
+		    keyword1 = $.trim(keyword1);
+		    // keyword2 변수에 저장된 데이터의 앞뒤 공백을 제거
+		    keyword2 = $.trim(keyword2);
+		    //----------------------------------------------
+		    // 입력된 키워드1값을 대문자로 바꿈. 영어는 대소문자를 통일한 후 비교해야함.
+		    keyword1 = keyword1.toUpperCase();
+		    // 입력된 키워드1값을 대문자로 바꿈. 영어는 대소문자를 통일한 후 비교해야함.
+		    keyword2 = keyword2.toUpperCase();
+		    //----------------------------------------------
+		    // class=sungjuk 가진 태그 후손의 tbody 태그 후손의 tr 태그(=현재 17개 tr)를 관리하는
+		    // JQuery 객체의 메위주를 변수 trsObj 에 저장하기
+		    const trsObj = obj.find('tbody tr');
+		    // table 태그 후손 중 tbody 후손중 모든 tr 을 감추기
+		    trsObj.hide();
+		    obj.find('tbody tr').css({ 'background-color': '' });
+		    //----------------------------------------------
+		    let cnt = 0;
+		    for (let i = 0; i < trsObj.length; i++) {
+		      // 검색 대상이 되는 i번째 tr 태그를 관리하는 JQuery 객체의 메위주를 변수 trObj 에 저장하기
+		      const trObj = trsObj.eq(i);
+		      // i번째 tr 태그 내부의 1번째 td 태그가 안고 문자열 얻고 대문자로 바꾸기
+		      const td1Text = trObj.find('td').eq(0).text().toUpperCase();
+		      // i번째 tr 태그 내부의 2번째 td 태그가 안고 문자열 얻고 대문자로 바꾸기
+		      const td2Text = trObj.find('td').eq(1).text().toUpperCase();
+		      // i번째 tr 태그 내부의 3번째 td 태그가 안고 문자열 얻고 대문자로 바꾸기
+		      const td3Text = trObj.find('td').eq(2).text().toUpperCase();
+
+		      if (isKeyword1 == true && isKeyword2 == false) {
+		        // 1번째 또는 2번째 또는 3번째 td 태그가 안고 문자열에 keyword1 변수 안의 데이터가 있으면
+		        if (
+          td1Text.indexOf(keyword1) >= 0 ||
+          td2Text.indexOf(keyword1) >= 0 ||
+          td3Text.indexOf(keyword1) >= 0
+        ) {
+		          // i번째 tr 태그 보이기
+		          trObj.show();
+		          if (cnt % 2 == 1) {
+		            trObj.css({ 'background-color': 'gray' });
+		          }
+		          cnt++;
+		        }
+		      } else if (isKeyword1 == false && isKeyword2 == true) {
+		        // 1번째 또는 2번째 또는 3번째 td 태그가 안고 문자열에 keyword2 변수 안의 데이터가 있으면
+		        if (
+          td1Text.indexOf(keyword2) >= 0 ||
+          td2Text.indexOf(keyword2) >= 0 ||
+          td3Text.indexOf(keyword2) >= 0
+        ) {
+		          // i번째 tr 태그 보이기
+		          trObj.show();
+		          if (cnt % 2 == 1) {
+		            trObj.css({ 'background-color': 'gray' });
+		          }
+		          cnt++;
+		        }
+		      } else if (or_and == 'or') {
+		        if (
+		          td1Text.indexOf(keyword1) >= 0 ||
+          td2Text.indexOf(keyword1) >= 0 ||
+          td3Text.indexOf(keyword1) >= 0 ||
+		          td1Text.indexOf(keyword2) >= 0 ||
+          td2Text.indexOf(keyword2) >= 0 ||
+          td3Text.indexOf(keyword2) >= 0
+		        ) {
+		          trObj.show();
+		          if (cnt % 2 == 1) {
+		            trObj.css({ 'background-color': 'gray' });
+		          }
+		          cnt++;
+		        }
+		      } else if (or_and == 'and') {
+		        if (
+		          (td1Text.indexOf(keyword1) >= 0 ||
+            td2Text.indexOf(keyword1) >= 0 ||
+            td3Text.indexOf(keyword1) >= 0) &&
+          (td1Text.indexOf(keyword2) >= 0 ||
+            td2Text.indexOf(keyword2) >= 0 ||
+            td3Text.indexOf(keyword2) >= 0)
+		        ) {
+		          alert(keyword2 + ' ' + td1Text + ' ' + td2Text + ' ' + td3Text);
+		          trObj.show();
+		          if (cnt % 2 == 1) {
+		            trObj.css({ 'background-color': 'gray' });
+		          }
+		          cnt++;
+		        }
+		      }
+		    }
+		  });
+		});
+	</script>
+</head>
+<body><center>
+<!-------------------------------------------------->
+키워드 : 
+<input type="text"  name="keyword1"  class="keyword1"> 
+<select name="or_and" class="or_and">
+	<option value="or">or
+	<option value="and">and
+</select>
+<input type="text"  name="keyword2"  class="keyword2">
+
+
+
+<input type="button" value="검색" class="search" >
+<input type="button" value="모두검색" class="allSearch" ><br><br>
+<!-------------------------------------------------->
+<table border="1" cellpadding=5 class="sungjuk" style="border-collapse:collapse;">
+	<thead>
+		<tr ><th>번호<th>이름<th>평균
+	</thead>
+	<tbody>
+		<tr><td>101<td>John<td>87
+		<tr><td>102<td>Naman<td>90
+		<tr><td>103<td>Chirag<td>85
+		<tr><td>104<td>David<td>92
+		<tr><td>105<td>Kelly<td>81
+		<tr><td>106<td>Charles<td>77
+		<tr><td>107<td>Jerry<td>91
+		<tr><td>108<td>Beth<td>87
+		<tr><td>109<td>Caroline<td>82
+		<tr><td>110<td>Hanen<td>71
+		<tr><td>111<td>Douglas<td>57
+		<tr><td>112<td>Tim<td>86
+		<tr><td>113<td>Michael<td>68
+		<tr><td>114<td>Kimbley<td>88
+		<tr><td>115<td>Christinax<td>72
+		<tr><td>116<td>유원영<td>100
+		<tr><td>117<td>강다니엘<td>20
+		<tr><td>118<td>박인선<td>20
+	</tbody>
+</table>
+</body>
+
+
+</html>
