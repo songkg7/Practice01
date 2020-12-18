@@ -2,27 +2,50 @@
 const obj = $('.grade');
 const trsObj = obj.find('tbody tr');
 
+function inputTrColor(trsObj, oddColor, evenColor) {
+  trsObj.filter(':visible').filter(':even').css('background-color', oddColor);
+  trsObj.filter(':visible').filter(':odd').css('background-color', evenColor);
+}
+
 function searchTable(operator, word1, word2) {
   switch (operator) {
     case 'or':
-      for (let i = 0; i < trsObj.length; i++) {
-        const trObj = trsObj.eq(i);
+      trsObj.each(function () {
+        const trObj = $(this);
         for (let j = 0; j < trObj.children('td').length; j++) {
           const tdText = trObj.children('td').eq(j).text().toUpperCase();
           if (tdText.indexOf(word1) >= 0 || tdText.indexOf(word2) >= 0) {
             trObj.show();
+            inputTrColor(trsObj, 'aquamarine', 'lightgrey');
           }
         }
-      }
+      });
+      // for (let i = 0; i < trsObj.length; i++) {
+      // const trObj = trsObj.eq(i);
+      // for (let j = 0; j < trObj.children('td').length; j++) {
+      //   const tdText = trObj.children('td').eq(j).text().toUpperCase();
+      //   if (tdText.indexOf(word1) >= 0 || tdText.indexOf(word2) >= 0) {
+      //     trObj.show();
+      //   }
+      // }
+      // }
       break;
     case 'and':
-      for (let i = 0; i < trsObj.length; i++) {
-        const trObj = trsObj.eq(i);
+      trsObj.each(function () {
+        const trObj = $(this);
         const tdText = trObj.children('td').text().toUpperCase();
         if (tdText.indexOf(word1) >= 0 && tdText.indexOf(word2) >= 0) {
           trObj.show();
+          inputTrColor(trsObj, 'aquamarine', 'lightgrey');
         }
-      }
+      });
+      // for (let i = 0; i < trsObj.length; i++) {
+      //   const trObj = trsObj.eq(i);
+      //   const tdText = trObj.children('td').text().toUpperCase();
+      //   if (tdText.indexOf(word1) >= 0 && tdText.indexOf(word2) >= 0) {
+      //     trObj.show();
+      //   }
+      // }
       break;
     default:
       break;
@@ -71,8 +94,9 @@ function getRank(score) {
 
 $(() => {
   obj.find('thead tr').css('background-color', 'aqua');
-  obj.find('tbody tr:odd').css('background-color', 'aquamarine');
+  // obj.find('tbody tr:odd').css('background-color', 'aquamarine');
 
+  inputTrColor(trsObj, 'aquamarine', 'lightgrey');
   // click event
   $('.search').on('click', function () {
     let keyword1 = $('.keyword1').val();
@@ -101,6 +125,7 @@ $(() => {
     $('.keyword1').val('');
     $('.keyword2').val('');
     obj.find('tbody tr').show();
+    inputTrColor(trsObj, 'aquamarine', 'lightgrey');
   });
 
   // checkbox를 선택하면 그에 맞는 점수의 학생만 보이게 하기

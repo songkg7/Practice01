@@ -1,3 +1,43 @@
+// pattern validation
+function checkPattern(val: string, regExp: RegExp, msg: string): boolean {
+  if (regExp.test(val.value) === false) {
+    console.log(msg);
+    val.value = '';
+    val.focus();
+    return false;
+  }
+  return true;
+}
+
+function checkId(value: string): void {
+  if (value === '') {
+    console.log('ID를 입력해주세요.');
+  } else {
+    checkPattern(value, /^[a-z][a-z\d_]{5,14}$/, 'ID의 형식이 다릅니다.');
+  }
+}
+
+function checkPwd(): void {
+  const pwd = <HTMLInputElement>document.getElementById('pwd');
+  const { value } = pwd;
+  if (value === '') {
+    console.log('Password를 입력해주세요.');
+  } else {
+    checkPattern(pwd, /^\w{5,9}$/, 'Password의 형식이 다릅니다.');
+  }
+}
+
+// pwd confirm
+function confirmPwd(): void {
+  const checkPwd = <HTMLInputElement>document.getElementById('checkPwd');
+  const { value } = checkPwd;
+  if (value === '') {
+    console.log('Password를 확인해주세요.');
+  }
+  // pwd 의 정규식 패턴이 변경될 경우 수정시 에러날 확률이 높으므로 코드 수정 필요
+  checkPattern(checkPwd, /^\w{5,9}$/, 'Password가 일치하지 않습니다.');
+}
+
 function checkRegisterNum(num: string): boolean {
   const regExp = new RegExp(/^\d{6}-?\d{7}$/);
   return regExp.test(num);
@@ -78,19 +118,16 @@ function validatePhone(num: number) {
     if (phone1.length !== 3) {
       console.log('첫번째 자리의 숫자가 모자랍니다.');
       document.myForm.phone1.focus();
-      return;
     }
   } else if (num === 2) {
     if (phone2.length !== 4) {
       console.log('두번째 자리의 숫자가 모자랍니다.');
       document.myForm.phone2.focus();
-      return;
     }
   } else if (num === 3) {
     if (phone3.length !== 4) {
       console.log('세번째 자리의 숫자가 모자랍니다.');
       document.myForm.phone3.focus();
-      return;
     }
   }
 }
