@@ -1,0 +1,45 @@
+SELECT EMP_NO, EMP_NAME, TO_CHAR(HIRE_DATE, 'YYYY-MM-DD Q') || '/4분기'
+FROM EMPLOYEE;
+SELECT EMP_NO, EMP_NAME, TO_CHAR(HIRE_DATE, 'YYYY-MM-DD ') || TO_CHAR(HIRE_DATE, 'DY', 'NLS_DATE_LANGUAGE = Korean')
+FROM EMPLOYEE;
+
+-- 생일 출력
+SELECT EMP_NO, EMP_NAME, TO_CHAR(TO_DATE('19' || SUBSTR(RESIST_NUM, 1, 6)), 'YYYY-MM-DD')
+FROM EMPLOYEE;
+
+SELECT EMP_NO, EMP_NAME, TO_DATE('19' || SUBSTR(RESIST_NUM, 1, 6), 'YYYY-MM-DD')
+FROM EMPLOYEE;
+
+-- 근속일수
+SELECT EMP_NO, EMP_NAME, SYSDATE - HIRE_DATE
+FROM EMPLOYEE;
+
+-- CREATE USER king IDENTIFIED BY k123;
+-- GRANT CONNECT, DBA, RESOURCE TO king;
+
+SELECT *
+FROM EMPLOYEE;
+
+-- column 의 명칭을 사용자화하여 출력하기
+SELECT EMP_NO 직원번호, EMP_NAME 직원명, RANK 직급, SALARY || '만원' 연봉, HIRE_DATE 입사일
+FROM EMPLOYEE;
+
+-- employee table 에서 직원명 직급 연봉 세금을 검색
+SELECT EMP_NAME, RANK, SALARY || '만원' AS 연봉, SALARY * 0.12 || '만원' AS TAX
+FROM EMPLOYEE;
+
+-- employee table 에서 직원명 직급 연봉 실수령액을 검색
+SELECT EMP_NAME, RANK, SALARY || '만원' AS 연봉, SALARY - (SALARY * 0.12) || '만원' AS TAX
+FROM EMPLOYEE;
+
+-- employee table 에서 직급을 중복없이 검색
+SELECT DISTINCT RANK AS 직급
+FROM EMPLOYEE;
+SELECT UNIQUE(RANK) AS 직급
+FROM EMPLOYEE;
+
+-- employee table 에서 부서번호와 직급을 중복없이 검색
+SELECT DISTINCT DEP_NO AS 부서번호, RANK AS 직급
+FROM EMPLOYEE ORDER BY 1;
+
+select * from user_users;
