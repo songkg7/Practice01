@@ -423,4 +423,203 @@ WHERE dep_no IN (10, 30)
 
 SELECT *
 FROM employee
-WHERE (dep_no = 10 AND salary < 2000) OR (dep_no = 20 AND salary >= 3500);
+WHERE (dep_no = 10 AND salary < 2000)
+   OR (dep_no = 20 AND salary >= 3500);
+
+SELECT *
+FROM employee
+WHERE emp_name LIKE '김%';
+SELECT *
+FROM employee
+WHERE SUBSTR(emp_name, 1, 1) = '김';
+
+SELECT *
+FROM employee
+-- WHERE SUBSTR(emp_name, -1, 1) = '정';
+WHERE SUBSTR(emp_name, LENGTH(emp_name), 1) = '정';
+SELECT *
+FROM employee
+WHERE emp_name LIKE '%정';
+
+SELECT *
+FROM employee
+WHERE LENGTH(emp_name) = 3
+  AND emp_name LIKE '김%';
+SELECT *
+FROM employee
+WHERE emp_name LIKE '김__'; -- _ => 언더바당 글자 하나씩 매칭
+
+SELECT *
+FROM employee
+WHERE emp_name LIKE '%김%';
+
+SELECT *
+FROM employee
+WHERE LENGTH(emp_name) = 2;
+SELECT *
+FROM employee
+WHERE emp_name LIKE '__';
+
+-- not like
+SELECT *
+FROM employee
+WHERE emp_name LIKE '%김%'
+  AND emp_name NOT LIKE '김%'
+  AND emp_name NOT LIKE '%김';
+
+-- regexp
+SELECT *
+FROM employee
+WHERE REGEXP_LIKE(emp_name, '^[^미][미]+[^미]$');
+
+-- 여직원 검색
+SELECT *
+FROM employee
+WHERE SUBSTR(resist_num, 7, 1) IN (2, 4);
+
+SELECT *
+FROM employee
+WHERE resist_num LIKE '______2%'
+   OR resist_num LIKE '______4%';
+
+SELECT *
+FROM employee
+WHERE SUBSTR(resist_num, 1, 1) IN ('6', '7')
+  AND SUBSTR(resist_num, 7, 1) = '1';
+SELECT *
+FROM employee
+WHERE resist_num LIKE '6_____1%'
+   OR resist_num LIKE '7_____1%';
+
+-- select birthday
+SELECT emp_no,
+       emp_name,
+       resist_num,
+--        CASE
+--            WHEN TO_DATE(EXTRACT(YEAR FROM SYSDATE) || '-' || TO_CHAR(TO_DATE(SUBSTR(resist_num, 1, 6)), 'MM-DD')) -
+--                 SYSDATE < 0 THEN
+--                TO_CHAR(TO_DATE(to_char(sysdate,'YYYY') || SUBSTR(resist_num, 3, 4)), 'YYYYMMDD')
+--            ELSE
+--                TO_CHAR(TO_DATE(EXTRACT(YEAR FROM SYSDATE) || SUBSTR(resist_num, 3, 4)), 'YYYYMMDD')
+--            END AS 다가올생일,
+--        CASE
+--            WHEN TO_DATE(EXTRACT(YEAR FROM SYSDATE) || '-' || TO_CHAR(TO_DATE(SUBSTR(resist_num, 1, 6)), 'MM-DD')) -
+--                 SYSDATE < 0 THEN ROUND(TO_DATE(EXTRACT(YEAR FROM SYSDATE) + 1 || '-' ||
+--                                                TO_CHAR(TO_DATE(SUBSTR(resist_num, 3, 4)), 'MM-DD')) - SYSDATE, 0)
+--            ELSE ROUND(TO_DATE(EXTRACT(YEAR FROM SYSDATE) || '-' ||
+--                               TO_CHAR(TO_DATE(SUBSTR(resist_num, 3, 4)), 'MM-DD')) - SYSDATE)
+--            END AS 생일까지남은날짜
+       CASE
+           WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYY') || SUBSTR(resist_num, 3, 4), 'YYYYMMDD') - SYSDATE > 0 THEN
+               ROUND(TO_DATE(TO_CHAR(SYSDATE, 'YYYY') || SUBSTR(resist_num, 3, 4), 'YYYYMMDD') - SYSDATE)
+           ELSE ROUND(TO_DATE(TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) + 1 || SUBSTR(resist_num, 3, 4), 'YYYYMMDD') -
+                      SYSDATE) END "D-DAY"
+FROM employee;
+
+CREATE TABLE product
+(
+    p_no    number(3),
+    p_name  varchar2(20) NOT NULL UNIQUE,
+    tot_cnt varchar2(20) NOT NULL
+);
+
+INSERT INTO product
+VALUES (1, '컴퓨터1', '20');
+INSERT INTO product
+VALUES (2, '컴퓨터2', '2');
+INSERT INTO product
+VALUES (3, '컴퓨터3', '4');
+INSERT INTO product
+VALUES (4, '컴퓨터4', '2');
+INSERT INTO product
+VALUES (5, '컴퓨터5', '16');
+INSERT INTO product
+VALUES (6, '컴퓨터6', '60');
+INSERT INTO product
+VALUES (7, '컴퓨터7', '30');
+INSERT INTO product
+VALUES (8, '컴퓨터8', '27');
+INSERT INTO product
+VALUES (9, '컴퓨터9', '25');
+INSERT INTO product
+VALUES (10, '컴퓨터10', '22');
+INSERT INTO product
+VALUES (11, '컴퓨터11', '34');
+INSERT INTO product
+VALUES (12, '컴퓨터12', '50');
+INSERT INTO product
+VALUES (13, '컴퓨터13', '8');
+INSERT INTO product
+VALUES (14, '컴퓨터14', '9');
+INSERT INTO product
+VALUES (15, '컴퓨터15', '10');
+
+SELECT *
+FROM product
+ORDER BY TO_NUMBER(tot_cnt) DESC;
+SELECT *
+FROM product
+ORDER BY LENGTH(tot_cnt) DESC, tot_cnt DESC;
+
+-- NOTE: JOIN
+SELECT emp_no, emp_name, rank, dep_no
+FROM employee;
+
+SELECT emp_name, resist_num, 'E' "구별"
+FROM employee
+UNION
+SELECT cus_name, resist_num, 'C'
+FROM customer;
+
+SELECT employee.emp_no, employee.emp_name, employee.rank, dept.dep_name
+FROM employee,
+     dept
+WHERE employee.dep_no = dept.dep_no;
+
+-- Oracle 만 가능한 방법
+SELECT emp_no 직원번호, emp_name 직원명, rank 직급, dep_name 부서명
+FROM employee e,
+     dept d
+WHERE e.dep_no = d.dep_no;
+
+-- 표준 SQL 방식 (ANSI)
+SELECT emp_no 직원번호, emp_name 직원명, rank 직급, dep_name 부서명
+FROM employee e
+         INNER JOIN dept d ON d.dep_no = e.dep_no;
+-- oracle
+SELECT c.cus_name, c.tel_num, e.emp_name, e.rank
+FROM customer c,
+     employee e
+WHERE c.emp_no = e.emp_no;
+-- ANSI
+SELECT cus_name, tel_num, emp_name, rank
+FROM customer c
+         INNER JOIN employee e ON e.emp_no = c.emp_no;
+
+SELECT cus_name, tel_num, emp_name, rank
+FROM customer c
+         INNER JOIN employee e ON e.emp_no = c.emp_no
+WHERE e.dep_no = 10;
+
+-- 3중 inner join
+-- oracle
+SELECT e.emp_no, e.emp_name, e.rank, d.dep_name, c.cus_name, c.tel_num
+FROM employee e,
+     dept d,
+     customer c
+WHERE d.dep_no = e.dep_no
+  AND e.emp_no = c.emp_no
+ORDER BY e.emp_name;
+-- ANSI
+SELECT e.emp_no, e.emp_name, e.rank, d.dep_name, c.cus_name, c.tel_num
+FROM (dept d INNER JOIN employee e ON d.dep_no = e.dep_no)
+         INNER JOIN customer c ON c.emp_no = e.emp_no
+ORDER BY e.emp_name;
+
+-- 직원번호, 직원명, 직급, 연봉등급 출력 후 연봉등급 오름차순, 직급 오름차순, 나이 내림차순 유지하기
+SELECT e.emp_no, e.emp_name, e.rank, sg.sal_grade_no
+FROM employee e
+         INNER JOIN salary_grade sg ON e.salary BETWEEN sg.min_salary AND sg.max_salary
+ORDER BY sg.sal_grade_no, DECODE(e.rank, '사장', 1, '부장', 2, '과장', 3, '대리', 4, '주임', 5, 6),
+         TO_DATE(SUBSTR(resist_num, 1, 6)) - SYSDATE DESC; -- 1949년 이전에 태어난 사람이 있을 경우는 수정해야함
+
