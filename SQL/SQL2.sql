@@ -1,62 +1,62 @@
-SELECT EMP_NO, EMP_NAME, TO_CHAR(HIRE_DATE, 'YYYY-MM-DD Q') || '/4분기'
-FROM EMPLOYEE;
-SELECT EMP_NO, EMP_NAME, TO_CHAR(HIRE_DATE, 'YYYY-MM-DD ') || TO_CHAR(HIRE_DATE, 'DY', 'NLS_DATE_LANGUAGE = Korean')
-FROM EMPLOYEE;
+SELECT emp_no, emp_name, TO_CHAR(hire_date, 'YYYY-MM-DD Q') || '/4분기'
+FROM employee;
+SELECT emp_no, emp_name, TO_CHAR(hire_date, 'YYYY-MM-DD ') || TO_CHAR(hire_date, 'DY', 'NLS_DATE_LANGUAGE = Korean')
+FROM employee;
 
 -- 생일 출력
-SELECT EMP_NO, EMP_NAME, TO_CHAR(TO_DATE('19' || SUBSTR(RESIST_NUM, 1, 6)), 'YYYY-MM-DD')
-FROM EMPLOYEE;
+SELECT emp_no, emp_name, TO_CHAR(TO_DATE('19' || SUBSTR(resist_num, 1, 6)), 'YYYY-MM-DD')
+FROM employee;
 
-SELECT EMP_NO, EMP_NAME, TO_DATE('19' || SUBSTR(RESIST_NUM, 1, 6), 'YYYY-MM-DD')
-FROM EMPLOYEE;
+SELECT emp_no, emp_name, TO_DATE('19' || SUBSTR(resist_num, 1, 6), 'YYYY-MM-DD')
+FROM employee;
 
 -- 근속일수
-SELECT EMP_NO, EMP_NAME, SYSDATE - HIRE_DATE
-FROM EMPLOYEE;
+SELECT emp_no, emp_name, SYSDATE - hire_date
+FROM employee;
 
 -- CREATE USER king IDENTIFIED BY k123;
 -- GRANT CONNECT, DBA, RESOURCE TO king;
 
 SELECT *
-FROM EMPLOYEE;
+FROM employee;
 
 -- column 의 명칭을 사용자화하여 출력하기
-SELECT EMP_NO 직원번호, EMP_NAME 직원명, RANK 직급, SALARY || '만원' 연봉, HIRE_DATE 입사일
-FROM EMPLOYEE;
+SELECT emp_no 직원번호, emp_name 직원명, rank 직급, salary || '만원' 연봉, hire_date 입사일
+FROM employee;
 
 -- employee table 에서 직원명 직급 연봉 세금을 검색
-SELECT EMP_NAME, RANK, SALARY || '만원' AS 연봉, SALARY * 0.12 || '만원' AS TAX
-FROM EMPLOYEE;
+SELECT emp_name, rank, salary || '만원' AS 연봉, salary * 0.12 || '만원' AS tax
+FROM employee;
 
 -- employee table 에서 직원명 직급 연봉 실수령액을 검색
-SELECT EMP_NAME, RANK, SALARY || '만원' AS 연봉, SALARY - (SALARY * 0.12) || '만원' AS TAX
-FROM EMPLOYEE;
+SELECT emp_name, rank, salary || '만원' AS 연봉, salary - (salary * 0.12) || '만원' AS tax
+FROM employee;
 
 -- employee table 에서 직급을 중복없이 검색
-SELECT DISTINCT RANK AS 직급
-FROM EMPLOYEE;
-SELECT UNIQUE(RANK) AS 직급
-FROM EMPLOYEE;
+SELECT DISTINCT rank AS 직급
+FROM employee;
+SELECT UNIQUE(rank) AS 직급
+FROM employee;
 
 -- employee table 에서 부서번호와 직급을 중복없이 검색
-SELECT DISTINCT DEP_NO AS 부서번호, RANK AS 직급
-FROM EMPLOYEE
+SELECT DISTINCT dep_no AS 부서번호, rank AS 직급
+FROM employee
 ORDER BY 1;
 
 SELECT *
-FROM EMPLOYEE
-WHERE SALARY = 3000;
+FROM employee
+WHERE salary = 3000;
 
 SELECT *
-FROM EMPLOYEE
-ORDER BY SALARY;
+FROM employee
+ORDER BY salary;
 
 SELECT *
-FROM EMPLOYEE
-ORDER BY DEP_NO, SALARY DESC;
+FROM employee
+ORDER BY dep_no, salary DESC;
 
-SELECT EMP_NO, EMP_NAME, DECODE(SUBSTR(RESIST_NUM, 7, 1), 1, '남', 3, '남', '여')
-FROM EMPLOYEE;
+SELECT emp_no, emp_name, DECODE(SUBSTR(resist_num, 7, 1), 1, '남', 3, '남', '여')
+FROM employee;
 
 SELECT CONCAT('Romeo', 'Juliet'),
        CONCAT('로미오', '줄리엣'),
@@ -65,7 +65,7 @@ SELECT CONCAT('Romeo', 'Juliet'),
        INITCAP('i am a boy'),
        LOWER('adbeFGC'),
        UPPER('abcdfeDG')
-FROM DUAL; -- dummy table
+FROM dual; -- dummy table
 
 SELECT LPAD('abc', 7, ' '),
        LPAD('abc', 7, '#'),
@@ -73,7 +73,7 @@ SELECT LPAD('abc', 7, ' '),
        RPAD('abc', 7, ' '),
        RPAD('abc', 7, '#'),
        RPAD('abc', 7, 's')
-FROM DUAL;
+FROM dual;
 
 -- trim
 SELECT TRIM(LEADING 'A' FROM 'AABBCCDD'),
@@ -88,7 +88,7 @@ SELECT TRIM(LEADING 'A' FROM 'AABBCCDD'),
        RTRIM('ABCDEFG ', 'EF'),
        TRIM(' ABCDEFG '),
        LENGTH(TRIM(' ABCDEFG '))
-FROM DUAL;
+FROM dual;
 
 -- substr
 SELECT SUBSTR('You are not alone', 9, 3),
@@ -96,7 +96,7 @@ SELECT SUBSTR('You are not alone', 9, 3),
        SUBSTR('You are not alone', 13, 2),
        SUBSTR('You are not alone', -5, 2),
        SUBSTR('You are not alone', 5, 0)
-FROM DUAL;
+FROM dual;
 
 -- replace
 SELECT REPLACE('You are not alone', 'You', 'We'),
@@ -104,7 +104,7 @@ SELECT REPLACE('You are not alone', 'You', 'We'),
        REPLACE('You are not alone', 'You', NULL),
        REPLACE('You are not alone', 'You'),
        TRANSLATE('You are not alone', 'You', 'We')
-FROM DUAL;
+FROM dual;
 
 SELECT ASCII('A'),
        ASCII('a'),
@@ -112,7 +112,7 @@ SELECT ASCII('A'),
        INSTR('Every Sha-la-la-la Every wo-o-wo-o', 'la'),
        INSTR('Every Sha-la-la-la Every wo-o-wo-o', 'la', 1),
        INSTR('Every Sha-la-la-la Every wo-o-wo-o', 'la', 1, 2)
-FROM DUAL;
+FROM dual;
 
 -- Math
 SELECT SIGN(32),
@@ -133,55 +133,294 @@ SELECT SIGN(32),
        POWER(3, 2),
        SQRT(2),
        MOD(9, 4)
-FROM DUAL;
+FROM dual;
 
 -- date
 -- 2월 30일은 없으므로 마지막일이 리턴
 SELECT ADD_MONTHS(TO_DATE('2020-1-30', 'YYYY-MM-DD'), 1)
-FROM DUAL;
+FROM dual;
 
 -- 12월 31일이 리턴
 SELECT ADD_MONTHS(TO_DATE('2020-11-30', 'YYYY-MM-DD'), 1)
-FROM DUAL;
+FROM dual;
 
 SELECT ADD_MONTHS(SYSDATE, 5)
-FROM DUAL;
+FROM dual;
 
 SELECT SYSDATE + 100
-FROM DUAL;
+FROM dual;
 
 SELECT TO_DATE('1994-07-07') + 100
-FROM DUAL;
+FROM dual;
 
 
 SELECT ADD_MONTHS(SYSDATE, 5 + (20 * 12)) + 10
-FROM DUAL;
+FROM dual;
 
 SELECT ROUND(SYSDATE - TO_DATE('1968-04-20')) - ROUND(SYSDATE - TO_DATE('1994-07-07'))
-FROM DUAL;
+FROM dual;
 
 SELECT TO_CHAR(SYSDATE)
-FROM DUAL;
+FROM dual;
 
+-- th_char 은 문자형으로 데이터를 리턴한다
 SELECT TO_CHAR(SYSDATE, 'DD'),
        TO_CHAR(SYSDATE, 'DAY'),
        TO_CHAR(SYSDATE, 'DAY', 'NLS_DATE_LANGUAGE = English'),
        TO_CHAR(SYSDATE, 'DY'),
+       TO_CHAR(SYSDATE, 'D'),
        TO_CHAR(SYSDATE, 'AD'),
        TO_CHAR(SYSDATE, 'YYYY/MM')
-FROM DUAL;
+FROM dual;
 
 -- 가장 빨리 돌아오는 월요일
 -- 두번째 인자로 해당하는 요일의 숫자를 전달해준다.
 SELECT NEXT_DAY(TO_DATE('1990-10-29'), 2)
-FROM DUAL;
+FROM dual;
 
 SELECT LAST_DAY(TO_DATE('1994-07-07'))
-FROM DUAL;
+FROM dual;
 SELECT LAST_DAY(SYSDATE)
-FROM DUAL;
+FROM dual;
 
 SELECT EXTRACT(YEAR FROM SYSDATE),
        EXTRACT(MONTH FROM SYSDATE),
        EXTRACT(DAY FROM SYSDATE)
-FROM DUAL;
+FROM dual;
+
+SELECT MONTHS_BETWEEN('1994-07-07', SYSDATE)
+FROM dual;
+
+SELECT 7000000
+FROM dual;
+
+-- to_char pattern
+-- 9 : 숫자가 있으면 그대로, 없으면 비운다.
+-- 0 : 숫자가 있으면 그대로, 없으면 0을 채운다.
+SELECT TO_CHAR(1234, '09999'),
+       TO_CHAR(1234, '999,999'),
+       TO_CHAR(1234, '99999.99'),
+       TO_CHAR(0.5, '999.99'),
+       TO_CHAR(0.5, '990.99'),
+       TO_CHAR(0.5, '099.99'),
+       TO_CHAR(1234, '$99,999.00'),
+       TO_CHAR(1234, 'L99,999.00'), -- L 은 local
+       '\' || TO_CHAR(1234, '99,999.00')
+FROM dual;
+
+-- to_number 패턴 전달에 주의
+SELECT TO_NUMBER('123456.9'),
+       TO_NUMBER('123,456.9', '999,999.9'),
+       TO_NUMBER('1,234,567', '9,999,999'),
+       TO_NUMBER('1,234,567', '9G999G999')
+FROM dual;
+
+-- decode (표준 SQL X)
+SELECT emp_no, emp_name, DECODE(SUBSTR(resist_num, 7, 1), '1', '남', '3', '남', '여')
+FROM employee;
+
+-- case (표준 SQL O, 조건이 많을 경우 decode 보다 가독성이 좋다)
+SELECT emp_no,
+       emp_name,
+       CASE SUBSTR(resist_num, 7, 1)
+           WHEN '1' THEN '남'
+           WHEN '3' THEN '남'
+           ELSE '여'
+           END
+FROM employee;
+
+SELECT emp_no,
+       emp_name,
+       CASE
+           WHEN SUBSTR(resist_num, 7, 1) = '1' THEN '남'
+           WHEN SUBSTR(resist_num, 7, 1) = '3' THEN '남'
+           ELSE '여'
+           END
+FROM employee;
+
+-- Ex) 월급 등급 나누기
+SELECT emp_no,
+       emp_name,
+       CASE
+           WHEN salary >= 5000 THEN 'A'
+           WHEN salary < 5000 AND salary >= 4000 THEN 'B'
+           WHEN salary < 4000 AND salary >= 3000 THEN 'C'
+           WHEN salary < 3000 AND salary >= 2000 THEN 'D'
+           WHEN salary < 2000 THEN 'F'
+           END salary_rank
+FROM employee;
+
+-- Ex) Find min-salary, max-salary, avg-salary, sum-salary, count-emp in employee table
+SELECT MIN(salary), MAX(salary), AVG(salary), SUM(salary), COUNT(emp_no)
+FROM employee;
+
+-- Ex)
+SELECT COUNT(DISTINCT dep_no)
+FROM employee;
+
+-- Ex) 담당직원이 있는 고객 수
+SELECT COUNT(emp_no)
+FROM customer;
+
+-- Ex) 고객을 담당하고 있는 직원 수
+SELECT COUNT(DISTINCT emp_no)
+FROM customer;
+
+-- Ex)
+SELECT emp_no, emp_name, TO_CHAR(hire_date, 'Q') || '/4분기' AS 입사분기
+FROM employee;
+
+-- Ex) 근속일수 계산
+SELECT emp_no, emp_name, ROUND((SYSDATE - hire_date) / 365)
+FROM employee;
+
+-- Ex)
+-- null 값 처리 (중요!!)
+-- 자료형의 통일이 반드시 필요하다
+SELECT cus_no, cus_name, NVL(TO_CHAR(emp_no), '없음')
+FROM customer;
+
+SELECT cus_no, cus_name, DECODE(emp_no, NULL, '없음', '있음')
+FROM customer;
+
+-- is null 의 사용
+SELECT cus_no, cus_name, CASE WHEN emp_no IS NULL THEN '없음' ELSE '있음' END
+FROM customer;
+
+SELECT cus_no, cus_name, NVL2(emp_no, '있음', '없음')
+FROM customer;
+
+SELECT emp_no,
+       emp_name,
+       TRUNC((SYSDATE - TO_DATE(SUBSTR(resist_num, 1, 6))) / 365, 1)         AS age,
+       TRUNC((SYSDATE - TO_DATE(SUBSTR(resist_num, 1, 6))) / 365, -1) || '대' AS 연령대
+FROM employee;
+
+-- Ex) 다양한 조건 sort
+SELECT *
+FROM employee
+ORDER BY DECODE(rank, '사장', 1, '부장', 2, '과장', 3, '대리', 4, '주임', 5, 6);
+
+SELECT *
+FROM employee
+ORDER BY CASE rank
+             WHEN '사장' THEN 1
+             WHEN '부장' THEN 2
+             WHEN '과장' THEN 3
+             WHEN '대리' THEN 4
+             WHEN '주임' THEN 5
+             ELSE 6
+             END;
+
+SELECT *
+FROM employee
+ORDER BY DECODE(rank, '사장', 1, '부장', 2, '과장', 3, '대리', 4, '주임', 5, 6),
+         TRUNC((SYSDATE - TO_DATE(SUBSTR(resist_num, 1, 6))) / 365, 1) DESC;
+
+-- Ex) 생일이 수요일인 직원 골라내기
+-- NOTE: !!) 50 은 1950년, 49는 2049년으로 인식되므로 필요하다면 decode 를 통해 처해줘야한다.
+SELECT *
+FROM employee
+WHERE TO_CHAR(TO_DATE(SUBSTR(resist_num, 1, 6)), 'D') = 4
+ORDER BY hire_date;
+
+-- 연산자
+SELECT *
+FROM employee 직원
+WHERE 직원.rank = '과장';
+
+SELECT *
+FROM employee 직원
+WHERE 직원.rank != '과장';
+
+SELECT *
+FROM employee 직원
+WHERE 직원.rank <> '과장';
+
+SELECT *
+FROM employee 직원
+WHERE 직원.rank = '과장'
+  AND 직원.dep_no = 10;
+
+SELECT *
+FROM employee 직원
+WHERE 직원.rank IN ('과장', '부장');
+
+SELECT *
+FROM employee 직원
+WHERE 직원.rank = ANY ('과장', '부장');
+
+SELECT *
+FROM employee 직원
+WHERE 직원.dep_no = 10 AND rank = '과장'
+   OR dep_no = 20 AND rank = '과장';
+
+SELECT *
+FROM employee 직원
+WHERE (dep_no = 10 OR dep_no = 20)
+  AND rank = '과장';
+
+SELECT *
+FROM employee 직원
+WHERE dep_no IN (10, 20)
+  AND rank = '과장';
+
+SELECT *
+FROM customer
+WHERE emp_no IS NULL;
+
+SELECT *
+FROM customer
+WHERE emp_no IS NOT NULL;
+
+-- NOTE: null check!!
+SELECT *
+FROM customer
+WHERE emp_no != 9
+   OR emp_no IS NULL;
+
+SELECT *
+FROM employee emp
+WHERE emp.salary >= 4000;
+
+SELECT *
+FROM employee emp
+WHERE emp.salary >= 3000
+  AND emp.salary <= 4000;
+
+SELECT *
+FROM employee emp
+WHERE emp.salary BETWEEN 3000 AND 4000;
+
+SELECT *
+FROM employee
+WHERE salary * 1.05 >= 3000;
+
+SELECT *
+FROM employee
+WHERE hire_date >= TO_DATE('1995-1-1');
+
+SELECT *
+FROM employee
+WHERE hire_date BETWEEN TO_DATE('1990-1-1') AND TO_DATE('1999-12-31');
+SELECT *
+FROM employee
+WHERE TO_NUMBER(TO_CHAR(hire_date, 'YYYY')) BETWEEN 1990 AND 1999;
+SELECT *
+FROM employee
+WHERE EXTRACT(YEAR FROM hire_date) BETWEEN 1990 AND 1999;
+
+-- Ex) like
+SELECT *
+FROM employee
+WHERE TO_CHAR(hire_date, 'YYYY') LIKE '199%'; -- % => i don't care what is it
+
+SELECT *
+FROM employee
+WHERE dep_no IN (10, 30)
+  AND salary < 3000
+  AND hire_date < TO_DATE('1996-1-1');
+
+SELECT *
+FROM employee
+WHERE (dep_no = 10 AND salary < 2000) OR (dep_no = 20 AND salary >= 3500);
