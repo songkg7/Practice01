@@ -621,5 +621,204 @@ SELECT e.emp_no, e.emp_name, e.rank, sg.sal_grade_no
 FROM employee e
          INNER JOIN salary_grade sg ON e.salary BETWEEN sg.min_salary AND sg.max_salary
 ORDER BY sg.sal_grade_no, DECODE(e.rank, '사장', 1, '부장', 2, '과장', 3, '대리', 4, '주임', 5, 6),
-         TO_DATE(SUBSTR(resist_num, 1, 6)) - SYSDATE DESC; -- 1949년 이전에 태어난 사람이 있을 경우는 수정해야함
+         TO_DATE(SUBSTR(resist_num, 1, 6)) - SYSDATE DESC;
+-- 1949년 이전에 태어난 사람이 있을 경우는 수정해야함
 
+-- SELF JOIN
+SELECT e1.emp_name, e1.rank, e2.emp_name, e2.rank
+FROM employee e1
+         JOIN employee e2 ON e1.mgr_emp_no = e2.emp_no;
+
+SELECT e1.emp_name, e1.rank, e2.emp_name, e2.rank
+FROM employee e1
+         JOIN employee e2 ON e2.mgr_emp_no = e1.emp_no;
+
+-- ANSI
+SELECT e1.emp_no,
+       e1.emp_name,
+       d.dep_name,
+       e1.rank,
+       sg.sal_grade_no,
+       e2.emp_name,
+       e2.rank,
+       c.cus_name
+FROM (((employee e1 INNER JOIN salary_grade sg ON e1.salary BETWEEN sg.min_salary AND sg.max_salary)
+    INNER JOIN dept d ON e1.dep_no = d.dep_no) JOIN employee e2 ON e1.mgr_emp_no = e2.emp_no)
+         INNER JOIN customer c ON c.emp_no = e1.emp_no;
+-- Oracle
+SELECT e1.emp_no,
+       e1.emp_name,
+       d.dep_name,
+       e1.rank,
+       sg.sal_grade_no,
+       e2.emp_name,
+       e2.rank,
+       c.cus_name
+FROM employee e1,
+     dept d,
+     salary_grade sg,
+     employee e2,
+     customer c
+WHERE e1.dep_no = d.dep_no
+  AND (e1.salary BETWEEN sg.min_salary AND sg.max_salary)
+  AND e2.emp_no = e1.mgr_emp_no
+  AND e1.emp_no = c.emp_no
+ORDER BY 1;
+
+-- OUTER JOIN
+-- left join 과 left outer join 은 동일하다
+-- oracle
+SELECT c.cus_no, c.cus_name, c.tel_num, e.emp_name, e.rank, e.dep_no
+FROM customer c,
+     employee e
+WHERE c.emp_no = e.emp_no(+);
+
+-- ANSI
+SELECT c.cus_no, c.cus_name, c.tel_num, e.emp_name, e.rank, e.dep_no
+FROM customer c
+         LEFT OUTER JOIN employee e ON c.emp_no = e.emp_no;
+
+-- oracle
+SELECT c.cus_no, c.cus_name, c.tel_num, e.emp_name, e.rank
+FROM customer c,
+     employee e
+WHERE c.emp_no = e.emp_no(+)
+  AND e.dep_no(+) = 10;
+
+-- ANSI
+SELECT c.cus_no, c.cus_name, c.tel_num, e.emp_name, e.rank
+FROM customer c
+         LEFT JOIN employee e ON e.emp_no = c.emp_no AND e.dep_no = 10;
+-- where 절이 나올 경우 행이 골라지므로 on 절 뒤에 나온다
+
+-- oracle
+SELECT c.cus_no, c.cus_name, c.tel_num, e.emp_name, e.rank, sg.sal_grade_no
+FROM customer c,
+     employee e,
+     salary_grade sg
+WHERE c.emp_no = e.emp_no(+)
+  AND e.salary BETWEEN sg.min_salary(+) AND sg.max_salary(+)
+ORDER BY 1;
+-- (+)를 양쪽에 붙일 수는 없다.
+
+-- ANSI
+SELECT c.cus_no, c.cus_name, c.tel_num, e.emp_name, e.rank, sg.sal_grade_no
+FROM (customer c LEFT JOIN employee e ON e.emp_no = c.emp_no)
+         LEFT JOIN
+     salary_grade sg ON e.salary BETWEEN sg.min_salary AND sg.max_salary
+ORDER BY 1;
+
+SELECT c.cus_no, c.cus_name, c.resist_num
+FROM customer c,
+     employee e
+WHERE c.emp_no = e.emp_no
+  AND (EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM TO_DATE(SUBSTR(e.resist_num, 1, 6)))) + 1 >= 40;
+-- 한국 나이
+
+-- 고객번호, 고객명, 담당직원번호, 담당직원명, 담당직원소속부서, 담당직원연봉등급, 담당직원직속상관명, 담당직원직속상관직급, 직속상관연봉등급
+-- oracle
+SELECT c.cus_no                             AS 고객번호,
+       c.cus_name                           AS 고객명,
+       NVL(TO_CHAR(e1.emp_no), '없음')        AS 담당직원번호,
+       NVL(TO_CHAR(e1.emp_name), '없음')      AS 담당직원명,
+       NVL(TO_CHAR(d.dep_name), '없음')       AS 담당직원소속부서,
+       NVL(TO_CHAR(sg1.sal_grade_no), '없음') AS 담당직원연봉등급,
+       NVL(TO_CHAR(e2.emp_name), '없음')      AS 담당직원직속상관명,
+       NVL(TO_CHAR(e2.rank), '없음')          AS 담당직원직속상관직급,
+       NVL(TO_CHAR(sg1.sal_grade_no), '없음') AS 직속상관연봉등급
+FROM employee e1,
+     employee e2,
+     customer c,
+     salary_grade sg1,
+     salary_grade sg2,
+     dept d
+WHERE c.emp_no = e1.emp_no(+)
+  AND d.dep_no(+) = e1.dep_no
+  AND e1.mgr_emp_no = e2.emp_no(+)
+  AND e1.salary BETWEEN sg1.min_salary(+) AND sg1.max_salary(+)
+  AND e2.salary BETWEEN sg2.min_salary(+) AND sg2.max_salary(+)
+ORDER BY 1;
+
+-- ANSI
+SELECT c.cus_no                             AS 고객번호,
+       c.cus_name                           AS 고객명,
+       NVL(TO_CHAR(e1.emp_no), '없음')        AS 담당직원번호,
+       NVL(TO_CHAR(e1.emp_name), '없음')      AS 담당직원명,
+       NVL(TO_CHAR(d.dep_name), '없음')       AS 담당직원소속부서,
+       NVL(TO_CHAR(sg1.sal_grade_no), '없음') AS 담당직원연봉등급,
+       NVL(TO_CHAR(e2.emp_name), '없음')      AS 담당직원직속상관명,
+       NVL(TO_CHAR(e2.rank), '없음')          AS 담당직원직속상관직급,
+       NVL(TO_CHAR(sg1.sal_grade_no), '없음') AS 직속상관연봉등급
+FROM customer c
+         LEFT JOIN employee e1 ON e1.emp_no = c.emp_no
+         LEFT JOIN dept d ON e1.dep_no = d.dep_no
+         LEFT JOIN salary_grade sg1 ON e1.salary BETWEEN sg1.min_salary AND sg1.max_salary
+         LEFT JOIN employee e2 ON e1.mgr_emp_no = e2.emp_no
+         LEFT JOIN salary_grade sg2 ON e2.salary BETWEEN sg2.min_salary AND sg2.max_salary
+ORDER BY 1;
+
+-- NOTE: sub-query
+
+-- 비상관쿼리
+SELECT *
+FROM employee
+WHERE salary = (SELECT MAX(salary) FROM employee);
+
+SELECT *
+FROM employee
+WHERE salary >= (SELECT AVG(salary) FROM employee);
+
+-- 20번 부서의 최고연봉자
+SELECT *
+FROM employee
+WHERE salary =
+      (SELECT MAX(salary) FROM employee WHERE dep_no = 20)
+  AND dep_no = 20;
+
+SELECT emp_name                                                                 AS 직원명,
+       rank                                                                     AS 직급,
+       salary                                                                   AS 연봉,
+       TO_CHAR(salary / (SELECT SUM(salary) FROM employee) * 100, '099') || '%' AS 비율
+FROM employee;
+
+-- 10번 부서가 관리하는 고객
+SELECT c.cus_no, c.cus_name, c.emp_no
+FROM customer c,
+     employee e
+WHERE c.emp_no = e.emp_no
+  AND e.dep_no = 10;
+
+SELECT cus_no, cus_name, emp_no
+FROM customer
+WHERE emp_no IN (SELECT emp_no FROM employee WHERE dep_no = 10);
+
+SELECT cus_no, cus_name, emp_no
+FROM customer
+WHERE emp_no = ANY (SELECT emp_no FROM employee WHERE dep_no = 10);
+
+-- 한국남과 직급이 동일한 직원을 검색 (이름이 같은 사람이 없는 경우)
+SELECT *
+FROM employee
+WHERE rank = (SELECT rank FROM employee WHERE emp_name = '한국남');
+
+-- 무궁화와 직급이 동일한 직원을 검색 (동명이인의 경우)
+SELECT *
+FROM employee
+WHERE rank IN (SELECT rank FROM employee WHERE emp_name = '무궁화');
+
+
+-- 담당 고객이 2명 이상인 직원의 정보
+SELECT e.emp_no, e.emp_name, e.rank
+FROM employee e
+WHERE (SELECT COUNT(*) FROM customer c WHERE e.emp_no = c.emp_no) >= 2;
+
+-- 최고 연봉 직원의 직원번호, 직원명, 부서명, 연봉을 검색
+SELECT e.emp_no, e.emp_name, d.dep_name, e.salary
+FROM employee e,
+     dept d
+WHERE e.dep_no = d.dep_no
+  AND salary = (SELECT MAX(salary) FROM employee);
+
+SELECT emp_no, emp_name, dep_name, salary
+FROM employee
+WHERE
