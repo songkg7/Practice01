@@ -817,8 +817,197 @@ SELECT e.emp_no, e.emp_name, d.dep_name, e.salary
 FROM employee e,
      dept d
 WHERE e.dep_no = d.dep_no
-  AND salary = (SELECT MAX(salary) FROM employee);
+  AND e.salary = (SELECT MAX(salary) FROM employee);
 
-SELECT emp_no, emp_name, dep_name, salary
+SELECT e.emp_no, e.emp_name, (SELECT dep_name FROM dept d WHERE e.dep_no = d.dep_no) AS 부서, e.salary
+FROM employee e
+WHERE e.salary = (SELECT MAX(salary) FROM employee);
+
+SELECT e.emp_no, e.emp_name, e.salary
+FROM employee e
+WHERE e.salary >= (SELECT AVG(salary) FROM employee)
+  AND e.salary < (SELECT MAX(salary) FROM employee);
+
+-- rownum
+-- 상위 5명 구하기
+-- inline view
+SELECT emp_no, emp_name, salary, rownum
+FROM (SELECT emp_no, emp_name, salary
+      FROM employee
+      ORDER BY salary DESC)
+WHERE rownum <= 5;
+
+-- rownum 은 1이 포함되지 않으면 행을 골라낼 수 없다
+SELECT emp_no, emp_name, salary, rownum
+FROM (SELECT emp_no, emp_name, salary
+      FROM employee
+      ORDER BY salary DESC)
+WHERE rownum <= 5
+  AND rownum > 3;
+
+SELECT *
+FROM (SELECT e.*, rownum AS rnum
+      FROM (SELECT * FROM employee ORDER BY salary DESC) e
+      WHERE rownum <= 5)
+WHERE rnum >= 3;
+
+SELECT *
+FROM (SELECT e.*, rownum AS rnum
+      FROM (SELECT * FROM employee ORDER BY DECODE(rank, '사장', 1, '부장', 2, '과장', 3, '대리', 4, '주임', 5, 6), hire_date) e
+      WHERE rownum <= 5)
+WHERE rnum >= 2;
+
+-- 태어난 순서 11~20위
+SELECT *
+FROM (SELECT e.*, rownum AS rnum
+      FROM (SELECT *
+            FROM employee
+            ORDER BY TO_DATE(SUBSTR(resist_num, 1, 6))) e
+      WHERE rownum <= 20)
+WHERE rnum >= 11;
+
+-- 연봉 순위 구하기
+-- SELECT e.emp_no, e.emp_name, salary, rownum AS 연봉순위
+-- FROM (SELECT *
+--       FROM employee
+--       ORDER BY salary DESC) e;
+
+SELECT e1.emp_no, e1.emp_name, e1.salary, (SELECT COUNT(*) + 1 FROM employee e2 WHERE e2.salary > e1.salary) AS 연봉순위
+FROM employee e1
+ORDER BY 4;
+
+SELECT e1.emp_no,
+       e1.emp_name,
+       e1.resist_num,
+       (SELECT COUNT(*) + 1
+        FROM employee e2
+        WHERE TO_DATE(SUBSTR(e2.resist_num, 1, 6)) < TO_DATE(SUBSTR(e1.resist_num, 1, 6))) AS 출생순서
+FROM employee e1
+ORDER BY 4;
+
+SELECT emp_no, emp_name, (SELECT COUNT(*) FROM customer c WHERE e.emp_no = c.emp_no) AS 담당고객수
+FROM employee e;
+
+-- NOTE: join 과 sub-query 의 활용
+SELECT dep_name                                                                AS 직원명,
+       (SELECT COUNT(dep_no) FROM employee e WHERE d.dep_no = e.dep_no) || '명' AS 직원총수,
+       (SELECT COUNT(*)
+        FROM employee e2,
+             customer c
+        WHERE e2.dep_no = d.dep_no
+          AND e2.emp_no = c.emp_no) || '명'                                     AS 담당총고객수
+FROM dept d;
+
+--
+SELECT c.cus_no, c.cus_name, c.tel_num, e.emp_name, e.rank, e.dep_no
+FROM customer c,
+     employee e
+WHERE c.emp_no = e.emp_no(+)
+ORDER BY c.cus_no;
+
+SELECT c.cus_no, c.cus_name, c.tel_num, e.emp_name, e.rank, e.dep_no
+FROM customer c
+         LEFT JOIN employee e ON e.emp_no = c.emp_no
+ORDER BY c.cus_no;
+
+SELECT c.cus_no,
+       c.cus_name,
+       c.tel_num,
+       (SELECT emp_name FROM employee e WHERE e.emp_no = c.emp_no) AS 담당직원명,
+       (SELECT rank FROM employee e WHERE e.emp_no = c.emp_no)     AS 담당직원직급,
+       (SELECT dep_no FROM employee e WHERE e.emp_no = c.emp_no)   AS 부서번호
+FROM customer c
+ORDER BY c.cus_no;
+
+SELECT c.cus_no,
+       c.cus_name,
+       c.tel_num,
+       (SELECT emp_name FROM employee e WHERE e.emp_no = c.emp_no AND e.dep_no = 10) AS 담당직원명,
+       (SELECT rank FROM employee e WHERE e.emp_no = c.emp_no AND e.dep_no = 10)     AS 담당직원직급,
+       (SELECT dep_no FROM employee e WHERE e.emp_no = c.emp_no AND e.dep_no = 10)   AS 부서번호
+FROM customer c
+ORDER BY c.cus_no;
+--
+
+-- NOTE: group by
+-- 그룹을 지어서 결과를 내놓을 때 사용하는 키워드이다.
+-- 현재 상태를 파악하고 미래를 예측하기 위해 사용될 경우가 많으므로 굉장히 중요하다.
+-- ex) 직급별 평균 연봉
+-- ex) 남여별 평균 연봉
+-- ex) 나이별 평균 연봉
+
+SELECT dep_no, SUM(salary), ROUND(AVG(salary), 0), COUNT(*)
 FROM employee
-WHERE
+GROUP BY dep_no;
+
+SELECT rank, SUM(salary), ROUND(AVG(salary), 0), COUNT(*) || '명'
+FROM employee
+GROUP BY rank;
+
+SELECT dep_no, rank, SUM(salary), AVG(salary), COUNT(*)
+FROM employee
+GROUP BY dep_no, rank
+ORDER BY dep_no;
+
+-- HAVING
+-- WHERE 절의 조건은 FROM 테이블명 으로 지정된 테이블을 대상으로 한다.
+-- GROUP BY 절에 의해서 생긴 각 그룹에 대해서 조건을 적용하려면 HAVING 절을 사용해야 한다.
+SELECT dep_no, rank, SUM(salary), ROUND(AVG(salary), 0), COUNT(*) AS 인원수
+FROM employee
+GROUP BY dep_no, rank
+HAVING COUNT(*) >= 3
+ORDER BY dep_no;
+
+SELECT dep_no,
+       CASE WHEN SUBSTR(resist_num, 7, 1) IN (1, 3) THEN '남' ELSE '여' END AS gender,
+       SUM(salary)                                                        AS 연봉합계,
+       ROUND(AVG(salary))                                                 AS 평균연봉,
+       COUNT(*)                                                           AS 인원수
+FROM employee
+GROUP BY dep_no, CASE WHEN SUBSTR(resist_num, 7, 1) IN (1, 3) THEN '남' ELSE '여' END
+ORDER BY dep_no;
+
+SELECT EXTRACT(YEAR FROM hire_date) AS 입사연도, COUNT(*) AS 인원수
+FROM employee
+GROUP BY EXTRACT(YEAR FROM hire_date)
+ORDER BY 1;
+
+SELECT emp_name,
+       TO_DATE(SUBSTR(resist_num, 1, 6))                                                 AS 출생연도,
+       EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM TO_DATE(SUBSTR(resist_num, 1, 6))) AS 나이
+FROM employee;
+
+SELECT dep_no, ROUND(AVG((SYSDATE - hire_date) / 365), 1)
+FROM employee
+GROUP BY dep_no;
+
+SELECT TO_CHAR(hire_date, 'Q') || '분기' AS 입사분기, COUNT(*) AS 인원수
+FROM employee
+GROUP BY TO_CHAR(hire_date, 'Q')
+ORDER BY 1;
+
+SELECT TO_CHAR(hire_date, 'Q') || '분기' AS 입사분기, COUNT(*) AS 인원수
+FROM employee
+WHERE TO_CHAR(hire_date, 'Q') = 1
+GROUP BY TO_CHAR(hire_date, 'Q');
+
+SELECT SUBSTR(TO_CHAR(hire_date, 'YYYY'), 1, 3) || '0'                    AS 입사연대,
+       CASE WHEN SUBSTR(resist_num, 7, 1) IN (1, 3) THEN '남' ELSE '여' END AS gender,
+       COUNT(*)
+FROM employee
+GROUP BY SUBSTR(TO_CHAR(hire_date, 'YYYY'), 1, 3) || '0',
+         CASE WHEN SUBSTR(resist_num, 7, 1) IN (1, 3) THEN '남' ELSE '여' END
+ORDER BY 1;
+
+SELECT emp_name,
+       TO_CHAR(hire_date, 'YYYY-MM-DD Q') || '분기 ' || TO_CHAR(hire_date, 'DAY'),
+       ADD_MONTHS(hire_date, 12 * 20 + 5) + 10 AS 퇴직일
+FROM employee;
+
+SELECT e.dep_no, d.loc, COUNT(d.dep_no)
+FROM employee e,
+     dept d
+WHERE e.dep_no = d.dep_no
+GROUP BY e.dep_no, d.loc
+ORDER BY e.dep_no;
+
