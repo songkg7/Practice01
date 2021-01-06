@@ -977,7 +977,7 @@ SELECT emp_name,
        EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM TO_DATE(SUBSTR(resist_num, 1, 6))) AS 나이
 FROM employee;
 
-SELECT dep_no, ROUND(AVG((SYSDATE - hire_date) / 365), 1)
+SELECT dep_no, ROUND(AVG((SYSDATE - hire_date) / 365), 1) AS 평균근속연수
 FROM employee
 GROUP BY dep_no;
 
@@ -1000,14 +1000,101 @@ GROUP BY SUBSTR(TO_CHAR(hire_date, 'YYYY'), 1, 3) || '0',
 ORDER BY 1;
 
 SELECT emp_name,
-       TO_CHAR(hire_date, 'YYYY-MM-DD Q') || '분기 ' || TO_CHAR(hire_date, 'DAY'),
-       ADD_MONTHS(hire_date, 12 * 20 + 5) + 10 AS 퇴직일
+       TO_CHAR(hire_date, 'YYYY-MM-DD Q') || '분기 ' || TO_CHAR(hire_date, 'DAY') AS 입사일,
+       TO_CHAR(ADD_MONTHS(hire_date, 12 * 20 + 5) + 10, 'YYYY-MM-DD')           AS 퇴직일
 FROM employee;
 
+-- 아래 2개의 코드는 차이 구분하기
 SELECT e.dep_no, d.loc, COUNT(d.dep_no)
 FROM employee e,
      dept d
 WHERE e.dep_no = d.dep_no
 GROUP BY e.dep_no, d.loc
 ORDER BY e.dep_no;
+
+SELECT d.dep_no, d.loc, COUNT(e.emp_name)
+FROM employee e,
+     dept d
+WHERE e.dep_no(+) = d.dep_no
+GROUP BY d.dep_no, d.loc
+ORDER BY d.dep_no;
+
+SELECT EXTRACT(MONTH FROM hire_date) || '월' AS 입사월, COUNT(*)
+FROM employee
+GROUP BY EXTRACT(MONTH FROM hire_date)
+ORDER BY EXTRACT(MONTH FROM hire_date);
+
+SELECT m.month || '월' AS 입사월, COUNT(e.emp_name) AS 입사인원수
+FROM (SELECT CASE WHEN rownum < 10 THEN '0' ELSE '' END || rownum AS month
+      FROM employee
+      WHERE rownum <= 12) m,
+     employee e
+WHERE m.month = TO_CHAR(e.hire_date(+), 'MM')
+GROUP BY m.month || '월'
+ORDER BY 입사월;
+
+SELECT rank, ROUND(AVG(salary)), COUNT(*)
+FROM employee
+GROUP BY rank
+ORDER BY DECODE(rank, '사장', 1, '부장', 2, '과장', 3, '대리', 4, '주임', 5, 6);
+
+-- NOTE:
+SELECT d.dep_no,
+       d.dep_name,
+       (SELECT COUNT(*) FROM employee e WHERE e.dep_no = d.dep_no) AS 직원수,
+       (SELECT COUNT(*)
+        FROM employee e,
+             customer c
+        WHERE e.dep_no = d.dep_no
+          AND e.emp_no = c.emp_no)                                 AS 담당고객수
+FROM dept d;
+
+SELECT d.dep_no AS 부서번호, d.dep_name AS 부서명, COUNT(DISTINCT e.emp_no) AS 직원수, COUNT(c.emp_no) AS 담당고객수
+FROM employee e,
+     customer c,
+     dept d
+WHERE d.dep_no = e.dep_no(+)
+  AND c.emp_no(+) = e.emp_no
+GROUP BY d.dep_no, d.dep_name
+ORDER BY 1;
+
+-- NOTE: err check
+SELECT COUNT(*)
+FROM (SELECT SYSDATE + rownum - 1 AS xday
+      FROM employee
+      WHERE rownum <= 5) m
+WHERE TO_CHAR(m.xday, 'dy') != '토'
+  AND TO_CHAR(m.xday, 'dy') != '일'
+  AND TO_CHAR(m.xday, 'dy') != '월';
+
+-- NOTE: 주말 제외 평일 구하기
+SELECT MAX(x.yy)                          AS year
+     , MAX(DECODE(x.mm, '01', x.day_cnt)) AS "01"
+     , MAX(DECODE(x.mm, '02', x.day_cnt)) AS "02"
+     , MAX(DECODE(x.mm, '03', x.day_cnt)) AS "03"
+     , MAX(DECODE(x.mm, '04', x.day_cnt)) AS "04"
+     , MAX(DECODE(x.mm, '05', x.day_cnt)) AS "05"
+     , MAX(DECODE(x.mm, '06', x.day_cnt)) AS "06"
+     , MAX(DECODE(x.mm, '07', x.day_cnt)) AS "07"
+     , MAX(DECODE(x.mm, '08', x.day_cnt)) AS "08"
+     , MAX(DECODE(x.mm, '09', x.day_cnt)) AS "09"
+     , MAX(DECODE(x.mm, '10', x.day_cnt)) AS "10"
+     , MAX(DECODE(x.mm, '11', x.day_cnt)) AS "11"
+     , MAX(DECODE(x.mm, '12', x.day_cnt)) AS "12"
+FROM (
+         SELECT a.yy, a.mm, COUNT(1) AS day_cnt
+         FROM (SELECT TO_CHAR(sdt + level - 1, 'YYYY')     AS yy,
+                      TO_CHAR(sdt + level - 1, 'YYYYMM')   AS ym,
+                      TO_CHAR(sdt + level - 1, 'MM')       AS mm,
+--                       TO_CHAR(sdt + level - 1, 'YYYYMMDD') AS dt,
+                      TO_CHAR(sdt + level - 1, 'D')        AS d
+               FROM (SELECT TO_DATE('20210101', 'YYYYMMDD') AS sdt
+                          , TO_DATE('20211231', 'YYYYMMDD') AS edt
+                     FROM dual)
+               CONNECT BY level <= edt - sdt + 1
+              ) a
+         WHERE a.d NOT IN ('1', '7') --1: 일, 2:월, 3:화, 4:수, 5:목, 6:금, 7:토
+         GROUP BY a.yy, a.ym, a.mm
+         ORDER BY a.ym
+     ) x;
 
