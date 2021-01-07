@@ -1,13 +1,20 @@
 SELECT emp_no, emp_name, TO_CHAR(hire_date, 'YYYY-MM-DD Q') || '/4분기'
 FROM employee;
-SELECT emp_no, emp_name, TO_CHAR(hire_date, 'YYYY-MM-DD ') || TO_CHAR(hire_date, 'DY', 'NLS_DATE_LANGUAGE = Korean')
+SELECT emp_no,
+       emp_name,
+       TO_CHAR(hire_date, 'YYYY-MM-DD ') ||
+       TO_CHAR(hire_date, 'DY', 'NLS_DATE_LANGUAGE = Korean')
 FROM employee;
 
 -- 생일 출력
-SELECT emp_no, emp_name, TO_CHAR(TO_DATE('19' || SUBSTR(resist_num, 1, 6)), 'YYYY-MM-DD')
+SELECT emp_no,
+       emp_name,
+       TO_CHAR(TO_DATE('19' || SUBSTR(resist_num, 1, 6)), 'YYYY-MM-DD')
 FROM employee;
 
-SELECT emp_no, emp_name, TO_DATE('19' || SUBSTR(resist_num, 1, 6), 'YYYY-MM-DD')
+SELECT emp_no,
+       emp_name,
+       TO_DATE('19' || SUBSTR(resist_num, 1, 6), 'YYYY-MM-DD')
 FROM employee;
 
 -- 근속일수
@@ -29,7 +36,10 @@ SELECT emp_name, rank, salary || '만원' AS 연봉, salary * 0.12 || '만원' A
 FROM employee;
 
 -- employee table 에서 직원명 직급 연봉 실수령액을 검색
-SELECT emp_name, rank, salary || '만원' AS 연봉, salary - (salary * 0.12) || '만원' AS tax
+SELECT emp_name,
+       rank,
+       salary || '만원'                   AS 연봉,
+       salary - (salary * 0.12) || '만원' AS tax
 FROM employee;
 
 -- employee table 에서 직급을 중복없이 검색
@@ -55,7 +65,9 @@ SELECT *
 FROM employee
 ORDER BY dep_no, salary DESC;
 
-SELECT emp_no, emp_name, DECODE(SUBSTR(resist_num, 7, 1), 1, '남', 3, '남', '여')
+SELECT emp_no,
+       emp_name,
+       DECODE(SUBSTR(resist_num, 7, 1), 1, '남', 3, '남', '여')
 FROM employee;
 
 SELECT CONCAT('Romeo', 'Juliet'),
@@ -157,7 +169,8 @@ FROM dual;
 SELECT ADD_MONTHS(SYSDATE, 5 + (20 * 12)) + 10
 FROM dual;
 
-SELECT ROUND(SYSDATE - TO_DATE('1968-04-20')) - ROUND(SYSDATE - TO_DATE('1994-07-07'))
+SELECT ROUND(SYSDATE - TO_DATE('1968-04-20')) -
+       ROUND(SYSDATE - TO_DATE('1994-07-07'))
 FROM dual;
 
 SELECT TO_CHAR(SYSDATE)
@@ -216,7 +229,9 @@ SELECT TO_NUMBER('123456.9'),
 FROM dual;
 
 -- decode (표준 SQL X)
-SELECT emp_no, emp_name, DECODE(SUBSTR(resist_num, 7, 1), '1', '남', '3', '남', '여')
+SELECT emp_no,
+       emp_name,
+       DECODE(SUBSTR(resist_num, 7, 1), '1', '남', '3', '남', '여')
 FROM employee;
 
 -- case (표준 SQL O, 조건이 많을 경우 decode 보다 가독성이 좋다)
@@ -251,7 +266,11 @@ SELECT emp_no,
 FROM employee;
 
 -- Ex) Find min-salary, max-salary, avg-salary, sum-salary, count-emp in employee table
-SELECT MIN(salary), MAX(salary), AVG(salary), SUM(salary), COUNT(emp_no)
+SELECT MIN(salary),
+       MAX(salary),
+       AVG(salary),
+       SUM(salary),
+       COUNT(emp_no)
 FROM employee;
 
 -- Ex)
@@ -292,8 +311,9 @@ FROM customer;
 
 SELECT emp_no,
        emp_name,
-       TRUNC((SYSDATE - TO_DATE(SUBSTR(resist_num, 1, 6))) / 365, 1)         AS age,
-       TRUNC((SYSDATE - TO_DATE(SUBSTR(resist_num, 1, 6))) / 365, -1) || '대' AS 연령대
+       TRUNC((SYSDATE - TO_DATE(SUBSTR(resist_num, 1, 6))) / 365, 1) AS age,
+       TRUNC((SYSDATE - TO_DATE(SUBSTR(resist_num, 1, 6))) / 365, -1) ||
+       '대'                                                           AS 연령대
 FROM employee;
 
 -- Ex) 다양한 조건 sort
@@ -510,9 +530,15 @@ SELECT emp_no,
 --                               TO_CHAR(TO_DATE(SUBSTR(resist_num, 3, 4)), 'MM-DD')) - SYSDATE)
 --            END AS 생일까지남은날짜
        CASE
-           WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYY') || SUBSTR(resist_num, 3, 4), 'YYYYMMDD') - SYSDATE > 0 THEN
-               ROUND(TO_DATE(TO_CHAR(SYSDATE, 'YYYY') || SUBSTR(resist_num, 3, 4), 'YYYYMMDD') - SYSDATE)
-           ELSE ROUND(TO_DATE(TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) + 1 || SUBSTR(resist_num, 3, 4), 'YYYYMMDD') -
+           WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYY') || SUBSTR(resist_num, 3, 4),
+                        'YYYYMMDD') -
+                SYSDATE > 0 THEN
+               ROUND(TO_DATE(TO_CHAR(SYSDATE, 'YYYY') ||
+                             SUBSTR(resist_num, 3, 4), 'YYYYMMDD') -
+                     SYSDATE)
+           ELSE ROUND(TO_DATE(TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) + 1 ||
+                              SUBSTR(resist_num, 3, 4),
+                              'YYYYMMDD') -
                       SYSDATE) END "D-DAY"
 FROM employee;
 
@@ -619,8 +645,10 @@ ORDER BY e.emp_name;
 -- 직원번호, 직원명, 직급, 연봉등급 출력 후 연봉등급 오름차순, 직급 오름차순, 나이 내림차순 유지하기
 SELECT e.emp_no, e.emp_name, e.rank, sg.sal_grade_no
 FROM employee e
-         INNER JOIN salary_grade sg ON e.salary BETWEEN sg.min_salary AND sg.max_salary
-ORDER BY sg.sal_grade_no, DECODE(e.rank, '사장', 1, '부장', 2, '과장', 3, '대리', 4, '주임', 5, 6),
+         INNER JOIN salary_grade sg
+                    ON e.salary BETWEEN sg.min_salary AND sg.max_salary
+ORDER BY sg.sal_grade_no,
+         DECODE(e.rank, '사장', 1, '부장', 2, '과장', 3, '대리', 4, '주임', 5, 6),
          TO_DATE(SUBSTR(resist_num, 1, 6)) - SYSDATE DESC;
 -- 1949년 이전에 태어난 사람이 있을 경우는 수정해야함
 
@@ -692,7 +720,12 @@ FROM customer c
 -- where 절이 나올 경우 행이 골라지므로 on 절 뒤에 나온다
 
 -- oracle
-SELECT c.cus_no, c.cus_name, c.tel_num, e.emp_name, e.rank, sg.sal_grade_no
+SELECT c.cus_no,
+       c.cus_name,
+       c.tel_num,
+       e.emp_name,
+       e.rank,
+       sg.sal_grade_no
 FROM customer c,
      employee e,
      salary_grade sg
@@ -702,7 +735,12 @@ ORDER BY 1;
 -- (+)를 양쪽에 붙일 수는 없다.
 
 -- ANSI
-SELECT c.cus_no, c.cus_name, c.tel_num, e.emp_name, e.rank, sg.sal_grade_no
+SELECT c.cus_no,
+       c.cus_name,
+       c.tel_num,
+       e.emp_name,
+       e.rank,
+       sg.sal_grade_no
 FROM (customer c LEFT JOIN employee e ON e.emp_no = c.emp_no)
          LEFT JOIN
      salary_grade sg ON e.salary BETWEEN sg.min_salary AND sg.max_salary
@@ -712,7 +750,9 @@ SELECT c.cus_no, c.cus_name, c.resist_num
 FROM customer c,
      employee e
 WHERE c.emp_no = e.emp_no
-  AND (EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM TO_DATE(SUBSTR(e.resist_num, 1, 6)))) + 1 >= 40;
+  AND (EXTRACT(YEAR FROM SYSDATE) -
+       EXTRACT(YEAR FROM TO_DATE(SUBSTR(e.resist_num, 1, 6)))) + 1 >=
+      40;
 -- 한국 나이
 
 -- 고객번호, 고객명, 담당직원번호, 담당직원명, 담당직원소속부서, 담당직원연봉등급, 담당직원직속상관명, 담당직원직속상관직급, 직속상관연봉등급
@@ -752,9 +792,11 @@ SELECT c.cus_no                             AS 고객번호,
 FROM customer c
          LEFT JOIN employee e1 ON e1.emp_no = c.emp_no
          LEFT JOIN dept d ON e1.dep_no = d.dep_no
-         LEFT JOIN salary_grade sg1 ON e1.salary BETWEEN sg1.min_salary AND sg1.max_salary
+         LEFT JOIN salary_grade sg1
+                   ON e1.salary BETWEEN sg1.min_salary AND sg1.max_salary
          LEFT JOIN employee e2 ON e1.mgr_emp_no = e2.emp_no
-         LEFT JOIN salary_grade sg2 ON e2.salary BETWEEN sg2.min_salary AND sg2.max_salary
+         LEFT JOIN salary_grade sg2
+                   ON e2.salary BETWEEN sg2.min_salary AND sg2.max_salary
 ORDER BY 1;
 
 -- NOTE: sub-query
@@ -775,10 +817,11 @@ WHERE salary =
       (SELECT MAX(salary) FROM employee WHERE dep_no = 20)
   AND dep_no = 20;
 
-SELECT emp_name                                                                 AS 직원명,
-       rank                                                                     AS 직급,
-       salary                                                                   AS 연봉,
-       TO_CHAR(salary / (SELECT SUM(salary) FROM employee) * 100, '099') || '%' AS 비율
+SELECT emp_name AS 직원명,
+       rank     AS 직급,
+       salary   AS 연봉,
+       TO_CHAR(salary / (SELECT SUM(salary) FROM employee) * 100, '099') ||
+       '%'      AS 비율
 FROM employee;
 
 -- 10번 부서가 관리하는 고객
@@ -819,7 +862,10 @@ FROM employee e,
 WHERE e.dep_no = d.dep_no
   AND e.salary = (SELECT MAX(salary) FROM employee);
 
-SELECT e.emp_no, e.emp_name, (SELECT dep_name FROM dept d WHERE e.dep_no = d.dep_no) AS 부서, e.salary
+SELECT e.emp_no,
+       e.emp_name,
+       (SELECT dep_name FROM dept d WHERE e.dep_no = d.dep_no) AS 부서,
+       e.salary
 FROM employee e
 WHERE e.salary = (SELECT MAX(salary) FROM employee);
 
@@ -853,7 +899,10 @@ WHERE rnum >= 3;
 
 SELECT *
 FROM (SELECT e.*, rownum AS rnum
-      FROM (SELECT * FROM employee ORDER BY DECODE(rank, '사장', 1, '부장', 2, '과장', 3, '대리', 4, '주임', 5, 6), hire_date) e
+      FROM (SELECT *
+            FROM employee
+            ORDER BY DECODE(rank, '사장', 1, '부장', 2, '과장', 3, '대리', 4, '주임', 5,
+                            6), hire_date) e
       WHERE rownum <= 5)
 WHERE rnum >= 2;
 
@@ -872,7 +921,12 @@ WHERE rnum >= 11;
 --       FROM employee
 --       ORDER BY salary DESC) e;
 
-SELECT e1.emp_no, e1.emp_name, e1.salary, (SELECT COUNT(*) + 1 FROM employee e2 WHERE e2.salary > e1.salary) AS 연봉순위
+SELECT e1.emp_no,
+       e1.emp_name,
+       e1.salary,
+       (SELECT COUNT(*) + 1
+        FROM employee e2
+        WHERE e2.salary > e1.salary) AS 연봉순위
 FROM employee e1
 ORDER BY 4;
 
@@ -881,21 +935,25 @@ SELECT e1.emp_no,
        e1.resist_num,
        (SELECT COUNT(*) + 1
         FROM employee e2
-        WHERE TO_DATE(SUBSTR(e2.resist_num, 1, 6)) < TO_DATE(SUBSTR(e1.resist_num, 1, 6))) AS 출생순서
+        WHERE TO_DATE(SUBSTR(e2.resist_num, 1, 6)) <
+              TO_DATE(SUBSTR(e1.resist_num, 1, 6))) AS 출생순서
 FROM employee e1
 ORDER BY 4;
 
-SELECT emp_no, emp_name, (SELECT COUNT(*) FROM customer c WHERE e.emp_no = c.emp_no) AS 담당고객수
+SELECT emp_no,
+       emp_name,
+       (SELECT COUNT(*) FROM customer c WHERE e.emp_no = c.emp_no) AS 담당고객수
 FROM employee e;
 
 -- NOTE: join 과 sub-query 의 활용
-SELECT dep_name                                                                AS 직원명,
-       (SELECT COUNT(dep_no) FROM employee e WHERE d.dep_no = e.dep_no) || '명' AS 직원총수,
+SELECT dep_name                            AS 직원명,
+       (SELECT COUNT(dep_no) FROM employee e WHERE d.dep_no = e.dep_no) ||
+       '명'                                 AS 직원총수,
        (SELECT COUNT(*)
         FROM employee e2,
              customer c
         WHERE e2.dep_no = d.dep_no
-          AND e2.emp_no = c.emp_no) || '명'                                     AS 담당총고객수
+          AND e2.emp_no = c.emp_no) || '명' AS 담당총고객수
 FROM dept d;
 
 --
@@ -922,9 +980,18 @@ ORDER BY c.cus_no;
 SELECT c.cus_no,
        c.cus_name,
        c.tel_num,
-       (SELECT emp_name FROM employee e WHERE e.emp_no = c.emp_no AND e.dep_no = 10) AS 담당직원명,
-       (SELECT rank FROM employee e WHERE e.emp_no = c.emp_no AND e.dep_no = 10)     AS 담당직원직급,
-       (SELECT dep_no FROM employee e WHERE e.emp_no = c.emp_no AND e.dep_no = 10)   AS 부서번호
+       (SELECT emp_name
+        FROM employee e
+        WHERE e.emp_no = c.emp_no
+          AND e.dep_no = 10) AS 담당직원명,
+       (SELECT rank
+        FROM employee e
+        WHERE e.emp_no = c.emp_no
+          AND e.dep_no = 10) AS 담당직원직급,
+       (SELECT dep_no
+        FROM employee e
+        WHERE e.emp_no = c.emp_no
+          AND e.dep_no = 10) AS 부서번호
 FROM customer c
 ORDER BY c.cus_no;
 --
@@ -959,12 +1026,15 @@ HAVING COUNT(*) >= 3
 ORDER BY dep_no;
 
 SELECT dep_no,
-       CASE WHEN SUBSTR(resist_num, 7, 1) IN (1, 3) THEN '남' ELSE '여' END AS gender,
-       SUM(salary)                                                        AS 연봉합계,
-       ROUND(AVG(salary))                                                 AS 평균연봉,
-       COUNT(*)                                                           AS 인원수
+       CASE
+           WHEN SUBSTR(resist_num, 7, 1) IN (1, 3) THEN '남'
+           ELSE '여' END   AS gender,
+       SUM(salary)        AS 연봉합계,
+       ROUND(AVG(salary)) AS 평균연봉,
+       COUNT(*)           AS 인원수
 FROM employee
-GROUP BY dep_no, CASE WHEN SUBSTR(resist_num, 7, 1) IN (1, 3) THEN '남' ELSE '여' END
+GROUP BY dep_no,
+         CASE WHEN SUBSTR(resist_num, 7, 1) IN (1, 3) THEN '남' ELSE '여' END
 ORDER BY dep_no;
 
 SELECT EXTRACT(YEAR FROM hire_date) AS 입사연도, COUNT(*) AS 인원수
@@ -973,8 +1043,9 @@ GROUP BY EXTRACT(YEAR FROM hire_date)
 ORDER BY 1;
 
 SELECT emp_name,
-       TO_DATE(SUBSTR(resist_num, 1, 6))                                                 AS 출생연도,
-       EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM TO_DATE(SUBSTR(resist_num, 1, 6))) AS 나이
+       TO_DATE(SUBSTR(resist_num, 1, 6))                    AS 출생연도,
+       EXTRACT(YEAR FROM SYSDATE) -
+       EXTRACT(YEAR FROM TO_DATE(SUBSTR(resist_num, 1, 6))) AS 나이
 FROM employee;
 
 SELECT dep_no, ROUND(AVG((SYSDATE - hire_date) / 365), 1) AS 평균근속연수
@@ -991,8 +1062,10 @@ FROM employee
 WHERE TO_CHAR(hire_date, 'Q') = 1
 GROUP BY TO_CHAR(hire_date, 'Q');
 
-SELECT SUBSTR(TO_CHAR(hire_date, 'YYYY'), 1, 3) || '0'                    AS 입사연대,
-       CASE WHEN SUBSTR(resist_num, 7, 1) IN (1, 3) THEN '남' ELSE '여' END AS gender,
+SELECT SUBSTR(TO_CHAR(hire_date, 'YYYY'), 1, 3) || '0' AS 입사연대,
+       CASE
+           WHEN SUBSTR(resist_num, 7, 1) IN (1, 3) THEN '남'
+           ELSE '여' END                                AS gender,
        COUNT(*)
 FROM employee
 GROUP BY SUBSTR(TO_CHAR(hire_date, 'YYYY'), 1, 3) || '0',
@@ -1000,8 +1073,9 @@ GROUP BY SUBSTR(TO_CHAR(hire_date, 'YYYY'), 1, 3) || '0',
 ORDER BY 1;
 
 SELECT emp_name,
-       TO_CHAR(hire_date, 'YYYY-MM-DD Q') || '분기 ' || TO_CHAR(hire_date, 'DAY') AS 입사일,
-       TO_CHAR(ADD_MONTHS(hire_date, 12 * 20 + 5) + 10, 'YYYY-MM-DD')           AS 퇴직일
+       TO_CHAR(hire_date, 'YYYY-MM-DD Q') || '분기 ' ||
+       TO_CHAR(hire_date, 'DAY')                                      AS 입사일,
+       TO_CHAR(ADD_MONTHS(hire_date, 12 * 20 + 5) + 10, 'YYYY-MM-DD') AS 퇴직일
 FROM employee;
 
 -- 아래 2개의 코드는 차이 구분하기
@@ -1049,7 +1123,10 @@ SELECT d.dep_no,
           AND e.emp_no = c.emp_no)                                 AS 담당고객수
 FROM dept d;
 
-SELECT d.dep_no AS 부서번호, d.dep_name AS 부서명, COUNT(DISTINCT e.emp_no) AS 직원수, COUNT(c.emp_no) AS 담당고객수
+SELECT d.dep_no                 AS 부서번호,
+       d.dep_name               AS 부서명,
+       COUNT(DISTINCT e.emp_no) AS 직원수,
+       COUNT(c.emp_no)          AS 담당고객수
 FROM employee e,
      customer c,
      dept d
@@ -1083,11 +1160,11 @@ SELECT MAX(x.yy)                          AS year
      , MAX(DECODE(x.mm, '12', x.day_cnt)) AS "12"
 FROM (
          SELECT a.yy, a.mm, COUNT(1) AS day_cnt
-         FROM (SELECT TO_CHAR(sdt + level - 1, 'YYYY')     AS yy,
-                      TO_CHAR(sdt + level - 1, 'YYYYMM')   AS ym,
-                      TO_CHAR(sdt + level - 1, 'MM')       AS mm,
+         FROM (SELECT TO_CHAR(sdt + level - 1, 'YYYY')   AS yy,
+                      TO_CHAR(sdt + level - 1, 'YYYYMM') AS ym,
+                      TO_CHAR(sdt + level - 1, 'MM')     AS mm,
 --                       TO_CHAR(sdt + level - 1, 'YYYYMMDD') AS dt,
-                      TO_CHAR(sdt + level - 1, 'D')        AS d
+                      TO_CHAR(sdt + level - 1, 'D')      AS d
                FROM (SELECT TO_DATE('20210101', 'YYYYMMDD') AS sdt
                           , TO_DATE('20211231', 'YYYYMMDD') AS edt
                      FROM dual)
@@ -1097,4 +1174,138 @@ FROM (
          GROUP BY a.yy, a.ym, a.mm
          ORDER BY a.ym
      ) x;
+
+-- exists(subquery)
+-- null 이 아니면 true 를 리턴해준다
+SELECT cus_no, cus_name, emp_no
+FROM customer c
+WHERE EXISTS(SELECT e.emp_no
+             FROM employee e
+             WHERE e.emp_no = c.emp_no
+               AND e.dep_no = 10);
+
+-- 중복체크할 것
+SELECT AVG(EXTRACT(YEAR FROM SYSDATE) -
+           EXTRACT(YEAR FROM TO_DATE(SUBSTR(e.resist_num, 1, 6))) +
+           1) AS 평균나이
+FROM employee e,
+     customer c
+WHERE c.emp_no = e.emp_no;
+
+SELECT AVG(EXTRACT(YEAR FROM SYSDATE) -
+           EXTRACT(YEAR FROM TO_DATE(SUBSTR(e.resist_num, 1, 6))) +
+           1) AS 평균나이
+FROM employee e
+WHERE e.emp_no IN (SELECT emp_no FROM customer);
+
+SELECT AVG(EXTRACT(YEAR FROM SYSDATE) -
+           EXTRACT(YEAR FROM TO_DATE(SUBSTR(e.resist_num, 1, 6))) +
+           1) AS 평균나이
+FROM employee e
+WHERE (SELECT COUNT(*) FROM customer c WHERE c.emp_no = e.emp_no) > 0;
+
+SELECT rank,
+       ROUND(AVG(EXTRACT(YEAR FROM SYSDATE) -
+                 EXTRACT(YEAR FROM TO_DATE(SUBSTR(resist_num, 1, 6))) +
+                 1), 1) AS 평균나이
+FROM employee
+GROUP BY rank;
+
+SELECT TRUNC(EXTRACT(YEAR FROM SYSDATE) -
+             EXTRACT(YEAR FROM TO_DATE(SUBSTR(resist_num, 1, 6))) + 1,
+             -1) || '대' AS 연령대,
+       COUNT(*) || '명'  AS 인원수
+FROM customer
+GROUP BY TRUNC(EXTRACT(YEAR FROM SYSDATE) -
+               EXTRACT(YEAR FROM TO_DATE(SUBSTR(resist_num, 1, 6))) +
+               1, -1)
+ORDER BY 연령대;
+
+-- NOTE: INSERT
+INSERT INTO employee
+VALUES (emp_sq.nextval, '장보고', 40, '대리', 3500, TO_DATE('2012-05-28'), '8311091109310',
+        '01092499215', 3);
+
+-- NOTE: PK값을 주는 좀 더 좋은 방법
+INSERT INTO employee
+VALUES ((SELECT NVL(MAX(emp_no), 0) + 1 FROM employee), '장보고', 40, '대리', 3500,
+        TO_DATE('2012-05-28'), '8311091109310',
+        '01092499215', 3);
+
+UPDATE employee
+SET salary = salary * 1.05
+WHERE resist_num = '8410031281312'
+  AND emp_name = '공부해';
+
+UPDATE employee
+SET salary = salary * 0.98
+WHERE salary > 4000;
+
+UPDATE employee
+SET salary = salary + 50
+WHERE salary < (SELECT AVG(salary) FROM employee);
+
+UPDATE employee e
+SET salary = salary * 1.05
+WHERE e.emp_no IN (SELECT DISTINCT c.emp_no FROM customer c WHERE e.emp_no = c.emp_no);
+
+UPDATE employee
+SET salary = salary * 1.05
+WHERE emp_no IN (SELECT DISTINCT emp_no FROM customer WHERE emp_no IS NOT NULL);
+
+UPDATE employee
+SET salary = salary * 0.9
+WHERE emp_no IN
+      (SELECT emp_no
+       FROM (SELECT emp_no FROM employee ORDER BY salary DESC, hire_date)
+       WHERE rownum <= 5);
+
+-- 인원수가 제일 많은 직급 중, 연봉 1위인 직원의 연봉을 1% 삭감하기
+-- TODO: level 을 사용하여 해결해보기
+UPDATE employee
+SET salary = salary * 0.99
+WHERE emp_no = (SELECT emp_no
+                FROM employee
+                WHERE salary = (SELECT MAX(salary)
+                                FROM employee
+                                WHERE rank = (SELECT rank
+                                              FROM (SELECT rank, COUNT(*) AS 인원수
+                                                    FROM employee
+                                                    GROUP BY rank
+                                                    ORDER BY 인원수 DESC)
+                                              WHERE rownum = 1)));
+
+UPDATE employee
+SET salary = salary * 0.99
+WHERE emp_no =
+      (SELECT emp_no
+       FROM (SELECT emp_no,
+                    rank,
+                    (SELECT COUNT(*) FROM employee e2 WHERE e1.rank = e2.rank) AS cnt,
+                    salary
+             FROM employee e1
+             ORDER BY cnt DESC, salary DESC)
+       WHERE rownum = 1);
+
+SELECT *
+FROM employee;
+
+-- copy table
+CREATE TABLE employee2 AS
+SELECT *
+FROM employee;
+
+CREATE TABLE student AS
+SELECT emp_no AS stu_no, emp_name AS stu_name, resist_num
+FROM employee;
+
+-- NOTE: table view 가상테이블
+-- 원하는 정보만 가공해서 다룰 수 있다.
+-- 보안성 향상
+CREATE VIEW employee_vw1 AS
+SELECT *
+FROM employee
+ORDER BY salary DESC;
+
+SELECT * FROM employee_vw1;
 
