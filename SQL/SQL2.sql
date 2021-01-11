@@ -1601,4 +1601,87 @@ VALUES ( (SELECT NVL(MAX(b_no), 0) + 1 FROM board)
        , (SELECT print_no + 1 FROM board WHERE b_no = 1) --엄마글의 출력순서 번호를 검색한 후 1 더하는 select 가 들어가는 쿼리
        , (SELECT print_level + 1 FROM board WHERE b_no = 1) --엄마글의 댓글레벨 단계를 검색한 후 1 더하는 select 가 들어가는 쿼리
 
-       )
+       );
+
+----------------------------------------------------------------
+
+UPDATE board
+SET print_no = print_no + 1
+WHERE group_no = (SELECT group_no FROM board WHERE b_no = 1)
+  AND print_no > (SELECT print_no FROM board WHERE b_no = 1);
+
+SELECT *
+FROM board;
+
+ALTER TABLE board RENAME COLUMN wirter TO writer;
+
+SELECT (SELECT COUNT(*) FROM board) - rownum + 1 AS 번호, a.*
+FROM (SELECT subject                         AS 제목,
+             writer                          AS 작성자,
+             TO_CHAR(reg_date, 'YYYY.MM.DD') AS 작성일,
+             readcount                       AS 조회수
+      FROM board
+      ORDER BY group_no DESC, print_no) a;
+
+SELECT t.totcnt - rownum + 1 AS 번호, a.*
+FROM (SELECT subject                         AS 제목,
+             writer                          AS 작성자,
+             TO_CHAR(reg_date, 'YYYY.MM.DD') AS 작성일,
+             readcount                       AS 조회수
+      FROM board
+      ORDER BY group_no DESC, print_no) a,
+     (SELECT COUNT(*) AS totcnt FROM board) t;
+
+SELECT level - 1
+FROM dual
+CONNECT BY level < 5;
+
+CREATE TABLE religion
+(
+    code number(3),
+    name varchar2(20) NOT NULL UNIQUE,
+    PRIMARY KEY (code)
+);
+
+CREATE TABLE skills
+(
+    code number(3),
+    name varchar2(20) NOT NULL UNIQUE,
+    PRIMARY KEY (code)
+);
+
+CREATE TABLE academic_bg
+(
+    code number(3),
+    name varchar2(20) NOT NULL UNIQUE,
+    PRIMARY KEY (code)
+);
+
+CREATE TABLE developer
+(
+    dev_no        number(3),
+    name          varchar2(20) NOT NULL,
+    reg_num       varchar2(30) NOT NULL UNIQUE,
+    religion_code number(3)    NOT NULL,
+    school_code   number(3)    NOT NULL,
+    graduate_date date         NOT NULL,
+    PRIMARY KEY (dev_no)
+);
+
+CREATE TABLE dev_skills
+(
+    dev_no number(3) NOT NULL,
+    code   number(3) NOT NULL,
+    FOREIGN KEY (dev_no) REFERENCES developer (dev_no),
+    FOREIGN KEY (code) REFERENCES skills (code)
+);
+
+INSERT INTO developer
+VALUES ((SELECT NVL(MAX(dev_no), 0) + 1 FROM developer), '문유진', '0112254018414',
+        (SELECT code FROM religion WHERE name = '무교'),
+        (SELECT code FROM academic_bg WHERE academic_bg.name = '일반대졸'), TO_DATE('2019-12-25'));
+
+INSERT INTO dev_skills
+VALUES ((SELECT MAX(dev_no) FROM developer), (SELECT code FROM skills WHERE name = 'JSP'));
+INSERT INTO dev_skills
+VALUES ((SELECT MAX(dev_no) FROM developer), (SELECT code FROM skills WHERE name = 'Java'));
