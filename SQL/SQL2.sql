@@ -1673,7 +1673,7 @@ CREATE TABLE dev_skills
     dev_no number(3) NOT NULL,
     code   number(3) NOT NULL,
     FOREIGN KEY (dev_no) REFERENCES developer (dev_no),
-    FOREIGN KEY (code) REFERENCES skills (code)
+    FOREIGN KEY (code) REFERENCES skill_list (code)
 );
 
 INSERT INTO developer
@@ -1682,6 +1682,121 @@ VALUES ((SELECT NVL(MAX(dev_no), 0) + 1 FROM developer), '문유진', '011225401
         (SELECT code FROM academic_bg WHERE academic_bg.name = '일반대졸'), TO_DATE('2019-12-25'));
 
 INSERT INTO dev_skills
-VALUES ((SELECT MAX(dev_no) FROM developer), (SELECT code FROM skills WHERE name = 'JSP'));
+VALUES ((SELECT MAX(dev_no) FROM developer), (SELECT code FROM skill_list WHERE name = 'JSP'));
 INSERT INTO dev_skills
-VALUES ((SELECT MAX(dev_no) FROM developer), (SELECT code FROM skills WHERE name = 'Java'));
+VALUES ((SELECT MAX(dev_no) FROM developer), (SELECT code FROM skill_list WHERE name = 'Java'));
+
+-- NOTE: UPDATE
+
+UPDATE developer
+SET name          = '문유진',
+    reg_num       = '0112254018414',
+    school_code   = (SELECT code FROM academic_bg WHERE academic_bg.name = '일반대졸'),
+    religion_code = (SELECT code FROM religion WHERE name = '천주교'),
+    graduate_date = TO_DATE('2019-12-25')
+WHERE dev_no = 1;
+
+DELETE
+FROM dev_skills
+WHERE dev_no = 1;
+INSERT INTO dev_skills(dev_no, code)
+SELECT 1, code
+FROM skill_list
+WHERE name = 'Java'
+UNION
+SELECT 1, code
+FROM skill_list
+WHERE name = 'JSP'
+UNION
+SELECT 1, code
+FROM skill_list
+WHERE name = 'Delphi';
+
+SELECT dev_no,
+       name,
+       CASE WHEN SUBSTR(reg_num, 7, 1) IN (1, 3) THEN '남' ELSE '여' END AS gender,
+       TO_DATE(SUBSTR(reg_num, 1, 6))                                  AS age,
+       TO_DATE(SUBSTR(reg_num, 1, 6))                                  AS birth,
+       (SELECT name FROM religion WHERE code = religion_code)          AS religion,
+       graduate_date
+FROM developer
+WHERE school_code IN (SELECT code FROM academic_bg WHERE academic_bg.name IN ('전문대졸', '일반대졸'))
+  AND dev_no IN (SELECT dev_no
+                 FROM dev_skills
+                 WHERE code IN (SELECT code FROM skill_list WHERE name IN ('Java', 'JSP')));
+
+-- NOTE: DELETE
+-- 순서가 중요
+DELETE
+FROM dev_skills
+WHERE dev_no = 1;
+DELETE
+FROM developer
+WHERE dev_no = 1;
+
+-- Table structure
+-- table_name : student
+-- reg_num
+-- phone_num
+
+-- 대학 코드 Univ code table
+-- 가족 관계 table
+
+CREATE TABLE student
+(
+    stu_no    number(3),
+    name      varchar2(20) NOT NULL,
+    reg_num   varchar2(20) NOT NULL UNIQUE,
+    phone_num varchar2(20) NOT NULL UNIQUE,
+    PRIMARY KEY (stu_no)
+);
+
+CREATE TABLE univ_code
+(
+    code number(3),
+    name varchar2(20) NOT NULL UNIQUE,
+    PRIMARY KEY (code)
+);
+
+CREATE TABLE stu_app_univ
+(
+    stu_no     number(3),
+    apply_code number(3),
+    FOREIGN KEY (stu_no) REFERENCES student (stu_no),
+    FOREIGN KEY (apply_code) REFERENCES univ_code (code)
+);
+
+CREATE TABLE stu_family
+(
+    family_no   number(3),
+    stu_no      number(3),
+    relation    varchar2(20) NOT NULL,
+    family_name varchar2(20) NOT NULL,
+    birth_year  varchar2(20) NOT NULL,
+    PRIMARY KEY (family_no),
+    FOREIGN KEY (stu_no) REFERENCES student (stu_no)
+);
+
+-- level 활용 (너무 복잡한 방식)
+SELECT rownum,
+       s.stu_no,
+       s.name,
+       s.phone_num,
+       s.reg_num,
+       (SELECT COUNT(*) + 1
+        FROM stu_family
+        WHERE s.stu_no =
+              (SELECT level
+               FROM dual
+               CONNECT BY level <= (SELECT MAX(s.stu_no) FROM stu_family))) AS 가족인원수
+FROM student s;
+
+SELECT rownum,
+       s.stu_no,
+       s.name,
+       s.phone_num,
+       s.reg_num,
+       (SELECT COUNT(*) + 1
+        FROM stu_family f
+        WHERE f.stu_no = s.stu_no) AS 가족인원수
+FROM student s;
