@@ -1800,3 +1800,13 @@ SELECT rownum,
         FROM stu_family f
         WHERE f.stu_no = s.stu_no) AS 가족인원수
 FROM student s;
+
+-- NOTE: IN과 EXISTS 의 차이
+-- exists 는 괄호 안이 존재하기만 하면 True 를 리턴해준다
+SELECT *
+FROM employee
+WHERE emp_no IN (SELECT emp_no FROM customer);
+
+SELECT *
+FROM employee e
+WHERE EXISTS(SELECT 1 FROM customer c WHERE c.emp_no = e.emp_no);
