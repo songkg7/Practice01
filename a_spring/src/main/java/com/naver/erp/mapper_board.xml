@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.naver.erp.BoardDAO">
+
+    <insert id='insertBoard' parameterType="com.naver.erp.BoardDTO">
+        -- 	FIXME:	readcount 는 어디에..?
+        insert into BOARD (B_NO, SUBJECT, WRITER, CONTENT, PWD, EMAIL, GROUP_NO, PRINT_NO,
+                           PRINT_LEVEL)
+        VALUES ((select nvl(max(B_NO), 0) + 1 from board), #{subject}, #{writer}, #{content},
+                #{pwd}, #{email}, (select nvl(max(B_NO), 0) + 1 from BOARD), 0, 0)
+    </insert>
+</mapper>
