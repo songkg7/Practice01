@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.2"
+             xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
+    <persistence-unit name="study">
+        <properties>
+            <!-- H2 필수 속성 -->
+<!--            <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>-->
+<!--            <property name="javax.persistence.jdbc.user" value="sa"/>-->
+<!--            <property name="javax.persistence.jdbc.password" value=""/>-->
+<!--            <property name="javax.persistence.jdbc.url" value="jdbc:h2:tcp://localhost/~/test"/>-->
+<!--            <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>-->
+
+            <!-- MS-SQL 필수 속성 -->
+            <!--<property name="javax.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
+            <property name="javax.persistence.jdbc.user" value="sa"/>
+            <property name="javax.persistence.jdbc.password" value="study"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://192.168.111.222:1433;databaseName=study"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect"/>-->
+
+            <!-- Oracle 필수 속성 -->
+            <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver"/>
+
+<!--            오라클에 로그인할 계정 정보 -->
+            <property name="javax.persistence.jdbc.user" value="study"/>
+            <property name="javax.persistence.jdbc.password" value="study"/>
+
+<!--            오라클 주소 -->
+            <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@localhost:1522:XE"/>
+
+<!--            hibernate 에게 명령할 언어를 oracle12c 로 설정 -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle12cDialect"/>
+
+            <!-- Tibero 필수 속성 -->
+            <!--<property name="javax.persistence.jdbc.driver" value="com.tmax.tibero.jdbc.TbDriver"/>
+            <property name="javax.persistence.jdbc.user" value="study"/>
+            <property name="javax.persistence.jdbc.password" value="study"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:tibero:this:@192.168.111.222:8629:tibero"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect"/>-->
+
+            <!-- PostgreSQL 필수 속성 -->
+            <!--<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+            <property name="javax.persistence.jdbc.user" value="postgres"/>
+            <property name="javax.persistence.jdbc.password" value="study"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://192.168.111.222:5432/postgres"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL95Dialect"/>-->
+
+
+            <!-- 옵션 -->
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.use_sql_comments" value="true"/>
+            <property name="hibernate.jdbc.batch_size" value="10"/>
+
+<!--            create 옵션은 테이블을 생성할 때만 켜두도록 한다 -->
+<!--            <property name="hibernate.hbm2ddl.auto" value="create" />-->
+        </properties>
+    </persistence-unit>
+</persistence>
