@@ -1,0 +1,22 @@
+# JPA
+spring:
+#  thymeleaf:
+#    prefix: templates/
+#    check-template-location: true
+#    suffix: .html
+#    mode: HTML5
+#    cache: false
+#    template-resolver-order: 0
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+
+  datasource:
+    platform: oracle
+    driver-class-name: oracle.jdbc.OracleDriver
+    username: study
+    password: study
+    url: jdbc:oracle:thin:@localhost:1522:XE
