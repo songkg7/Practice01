@@ -13,9 +13,9 @@
     <title>Title</title>
 </head>
 <body>
-<center>
+<div style="text-align: center;">
     <form name="loginForm" method="post" action=""></form>
-</center>
+</div>
 <script>
     function checkLoginForm() {
         const admin_id = $('admin_id').val();

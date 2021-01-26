@@ -4,6 +4,13 @@
 
 <mapper namespace="com.naver.erp.BoardDAO">
 
+    <update id="updatePrintNo" parameterType="com.naver.erp.BoardDTO">
+        update BOARD
+        set PRINT_NO = PRINT_NO + 1
+        where GROUP_NO = (select GROUP_NO from BOARD where B_NO = #{b_no})
+          and PRINT_NO > (select PRINT_NO from BOARD where B_NO = #{b_no})
+    </update>
+
     <insert id='insertBoard' parameterType="com.naver.erp.BoardDTO">
         -- 	FIXME:	readcount 는 어디에..?
         insert into BOARD (B_NO, SUBJECT, WRITER, CONTENT, PWD, EMAIL, GROUP_NO, PRINT_NO,
@@ -11,4 +18,40 @@
         VALUES ((select nvl(max(B_NO), 0) + 1 from board), #{subject}, #{writer}, #{content},
                 #{pwd}, #{email}, (select nvl(max(B_NO), 0) + 1 from BOARD), 0, 0)
     </insert>
+
+    <!--    게시판 검색하는 select 문을 내포한 select 태그 선언 -->
+    <select id="getBoardList" resultType="java.util.HashMap">
+        SELECT B_NO || '',
+               SUBJECT,
+               WRITER,
+               READCOUNT || '',
+               to_char(REG_DATE, 'YYYY-MM-DD') || '',
+               PRINT_LEVEL || ''
+        from BOARD
+        ORDER BY GROUP_NO desc, PRINT_NO
+    </select>
+
+    <!--    게시판 1개 글을 검색하는 select 문을 내포한 select 태그 선언 -->
+    <select id="getBoard" parameterType="int" resultType="com.naver.erp.BoardDTO">
+        select b_no,
+               subject,
+               writer,
+               reg_date,
+               readcount,
+               content,
+               pwd,
+               email,
+               group_no,
+               print_no,
+               print_level
+        from BOARD
+        where B_NO = #{b_no}
+    </select>
+
+    <!--    게시판 1개 글 수정하는 update 문을 내포한 update 태그 선언 -->
+    <update id="updateReadcount" parameterType="int">
+        update BOARD
+        set READCOUNT = READCOUNT + 1
+        where B_NO = #{b_no}
+    </update>
 </mapper>

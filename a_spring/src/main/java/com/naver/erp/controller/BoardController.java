@@ -1,9 +1,14 @@
-package com.naver.erp;
+package com.naver.erp.controller;
 
+import com.naver.erp.BoardDTO;
+import com.naver.erp.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
+import java.util.Map;
 
 @Controller
 public class BoardController {
@@ -13,13 +18,25 @@ public class BoardController {
 
     @GetMapping("/boardList.do")
     public ModelAndView getBoardList() {
+
+        // 게시판 목록 얻기
+        List<Map<String, String>> boardList = this.boardService.getBoardList();
+
+        // ModelAndView 객체 생성
         ModelAndView mav = new ModelAndView();
         mav.setViewName("boardList.jsp");
+
+        // 객체의 addObject 메소드로 저장된 DB 연동 결과물은 HttpServletRequest 객체에도 저장된다.
+        mav.addObject("boardList", boardList);
+
         return mav;
     }
 
     @RequestMapping(value = "/boardRegForm.do")
-    public ModelAndView goBoardRegForm() {
+    // required 는 값이 반드시 들어와야하는지의 유무를 체크한다.
+    // defaultValue 는 null 값이 들어올 경우 기본적으로 주는 값이다.
+    public ModelAndView goBoardRegForm(@RequestParam(value = "b_no", required = false, defaultValue = "0") int b_no) {
+
         ModelAndView mav = new ModelAndView();
         mav.setViewName("boardRegForm.jsp");
         return mav;
@@ -56,5 +73,18 @@ public class BoardController {
 
 
         return this.boardService.insertBoard(boardDTO);
+    }
+
+    @PostMapping("/boardContentForm.do")
+    public ModelAndView goBoardContentForm(@RequestParam("b_no") int b_no) {
+        System.out.println("b_no = " + b_no);
+
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("boardContentForm.jsp");
+
+        BoardDTO board = this.boardService.getBoard(b_no);
+        mav.addObject("board", board);
+
+        return mav;
     }
 }

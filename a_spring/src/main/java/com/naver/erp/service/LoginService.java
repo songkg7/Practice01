@@ -1,4 +1,4 @@
-package com.naver.erp;
+package com.naver.erp.service;
 
 import java.util.Map;
 

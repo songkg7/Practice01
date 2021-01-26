@@ -1,5 +1,6 @@
-package com.naver.erp;
+package com.naver.erp.service;
 
+import com.naver.erp.LoginDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

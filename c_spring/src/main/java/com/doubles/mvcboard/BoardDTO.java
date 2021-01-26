@@ -1,4 +1,4 @@
-package com.naver.erp;
+package com.doubles.mvcboard;
 
 public class BoardDTO {
     private int b_no;
@@ -8,7 +8,7 @@ public class BoardDTO {
     private String pwd;
     private String email;
     private String reg_date;
-    private int readCount;
+    private int readcount;
     private int group_no;
     private int print_no;
     private int print_level;
@@ -69,12 +69,12 @@ public class BoardDTO {
         this.reg_date = reg_date;
     }
 
-    public int getReadCount() {
-        return readCount;
+    public int getReadcount() {
+        return readcount;
     }
 
-    public void setReadCount(int readCount) {
-        this.readCount = readCount;
+    public void setReadcount(int readcount) {
+        this.readcount = readcount;
     }
 
     public int getGroup_no() {
@@ -100,4 +100,6 @@ public class BoardDTO {
     public void setPrint_level(int print_level) {
         this.print_level = print_level;
     }
+
+
 }
