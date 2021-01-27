@@ -3,10 +3,23 @@
 <body>
 <div class="container">
     <div>
-        <h1>Hello Spring</h1> <p>회원 기능</p>
+        <h1>Hello Spring</h1>
+
+        <form action="login" method="post">
+            <div>
+                <label for="id">ID</label><input type="text" name="id" id="id">
+            </div>
+            <div>
+                <label for="pwd">Password</label><input type="password" name="pwd" id="pwd">
+            </div>
+            <button type="submit">Login</button>
+        </form>
+
+        <p>회원 기능</p>
         <p>
             <a href="/members/new">회원 가입</a> <a href="/members">회원 목록</a>
-        </p> </div>
+        </p>
+    </div>
 
 </div> <!-- /container -->
 </body>

@@ -2,8 +2,6 @@ package com.example.test7.service;
 
 import com.example.test7.domain.Member;
 import com.example.test7.repository.JpaMemberRepository;
-import com.example.test7.repository.MemberRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,15 +18,17 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
 
-    public Long join(Member member) {
+    // join method 를 통해 저장 후 id 값을 return
+    public String join(Member member) {
         validateDuplicateMember(member); //중복 회원 검증 memberRepository.save(member);
-        // 입력받은 계정 정보를 저장
+        // controller 를 통해 전달받은 계정 정보를 저장
         memberRepository.save(member);
-        return member.getId();
+        return member.getEmail();
     }
 
+    // 중복회원 검증
     private void validateDuplicateMember(Member member) {
-        memberRepository.findByName(member.getName()).ifPresent(m -> {
+        memberRepository.findByEmail(member.getEmail()).ifPresent(m -> {
             throw new IllegalStateException("이미 존재하는 회원입니다.");
         });
     }
@@ -40,7 +40,7 @@ public class MemberService {
         return memberRepository.findAll();
     }
 
-    public Optional<Member> findOne(Long memberId) {
-        return memberRepository.findById(memberId);
+    public Optional<Member> findOne(String memberId) {
+        return memberRepository.findByEmail(memberId);
     }
 }

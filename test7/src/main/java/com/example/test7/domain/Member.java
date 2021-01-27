@@ -1,47 +1,41 @@
 package com.example.test7.domain;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.annotations.Type;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import java.time.LocalDate;
 
 @Entity
-//@Getter
-//@Setter
+@Data
+@NoArgsConstructor
 public class Member {
 
     // primary key setting
     @Id
     // 고유 아이디 자동 부여
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long seq;
+    @NotEmpty
+    private String email;
+    // oracle 에서 숫자 타입 중 앞자리가 0이 붙으면 생략되므로 비밀번호는 String type 으로 생성해야한다.
+//    @Size(min=6, max=20, message="비밀번호는 최소 6자리를 입력해야합니다.")
+    @NotEmpty
+    private String password;
+
     private String name;
-    private Long password;
 
-    public Long getId() {
-        return id;
-    }
+    @Column(name = "Reg_Date")
+    @DateTimeFormat(pattern = "YYYY-MM-DD")
+    private LocalDate date;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Long getPassword() {
-        return password;
-    }
-
-    public void setPassword(Long password) {
+    public Member(@NotEmpty String email, @NotEmpty String password, String name) {
+        this.email = email;
         this.password = password;
+        this.name = name;
+        this.date = LocalDate.now();
     }
+
 }
