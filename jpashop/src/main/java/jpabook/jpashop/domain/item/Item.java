@@ -18,6 +18,7 @@ public abstract class Item {
 
     @Id
     @GeneratedValue
+    // FIXME: id 가 테이블마다 개별로 생성되지 않는 문제 있음.
     @Column(name = "item_id")
     private Long id;
 
