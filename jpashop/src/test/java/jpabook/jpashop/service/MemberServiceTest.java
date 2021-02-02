@@ -31,6 +31,7 @@ class MemberServiceTest {
         // given
         Member member = new Member();
         member.setName("kim");
+        member.setEmail(null);
 
         // when
         Long savedId = memberService.join(member);
