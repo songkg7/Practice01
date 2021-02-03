@@ -38,9 +38,12 @@ public class MemberController {
 
         Address address = new Address(form.getCity(), form.getStreet(), form.getZipcode());
 
+        // FIXME: setter 를 최대한 활용하지 않는 방향으로 리팩토링 하는 것이 좋다. MemberDTO 를 만들어서 해결해보자
+//        Member member = new Member(form.getName(), form.getEmail(), form.getPassword(), address);
         Member member = new Member();
         member.setName(form.getName());
         member.setEmail(form.getEmail());
+        member.setPassword(form.getPassword());
         member.setAddress(address);
 
         memberService.join(member);

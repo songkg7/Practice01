@@ -48,9 +48,13 @@ class MemberServiceTest {
         // given
         Member member1 = new Member();
         member1.setName("kim");
+        member1.setEmail("songkg@naver.com");
+        member1.setPassword("11111");
 
         Member member2 = new Member();
         member2.setName("kim");
+        member2.setEmail("songkg@naver.com");
+        member2.setPassword("22222");
 
         // when
         // junit5
@@ -62,7 +66,6 @@ class MemberServiceTest {
 //        memberService.join(member1);
 //        memberService.join(member2);
 
-
 //        memberService.join(member1);
 //        try {
 //            memberService.join(member2);
@@ -73,8 +76,6 @@ class MemberServiceTest {
 
         // then
 //        fail("예외가 발생해야 한다.");
-
-
     }
 
 }
