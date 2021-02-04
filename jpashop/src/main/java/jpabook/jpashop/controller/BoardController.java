@@ -78,7 +78,7 @@ public class BoardController {
     @PostMapping("/board/{boardId}/edit")
     public String updateForm(@PathVariable Long boardId, @ModelAttribute("board") BoardCreateForm form) {
 
-        boardService.updateBoard(boardId, form.getSubject(), form.getMainText());
+        boardService.update(boardId, form.getSubject(), form.getMainText());
         return "redirect:/board";
     }
 

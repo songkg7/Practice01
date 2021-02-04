@@ -30,7 +30,7 @@ public class BoardService {
     }
 
     @Transactional
-    public void updateBoard(Long boardId, String subject, String mainText) {
+    public void update(Long boardId, String subject, String mainText) {
         Board board = boardRepository.findOne(boardId);
         board.setSubject(subject);
         board.setMainText(mainText);
