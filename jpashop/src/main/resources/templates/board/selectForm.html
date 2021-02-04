@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"/>
+<body>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+    <div>
+        <table class="table table-primary">
+            <thead>
+            <tr>
+                <!--                <th>#</th>-->
+                <th th:text="${board.getSubject()}"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td th:text="${board.getMainText()}"></td>
+            </tr>
+            </tbody>
+
+        </table>
+    </div>
+    <a href="#" th:href="@{/board/{id}/edit (id=${board.id})}"
+       class="btn btn-primary" role="button">수정</a>
+    <div th:replace="fragments/footer :: footer"/>
+</div> <!-- /container -->
+</body>
+</html>

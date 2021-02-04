@@ -47,6 +47,7 @@ public class ItemController {
         return "items/itemList";
     }
 
+    // get item update
     @GetMapping("/items/{itemId}/edit")
     public String updateItemForm(@PathVariable("itemId") Long itemId, Model model) {
         // 책만 가저온다고 가정
@@ -66,6 +67,7 @@ public class ItemController {
         return "items/updateItemForm";
     }
 
+    // post item update
     @PostMapping("/items/{itemId}/edit")
     public String updateItem(@PathVariable Long itemId, @ModelAttribute("form") BookForm form) {
 
@@ -79,6 +81,7 @@ public class ItemController {
 //        book.setIsbn(form.getIsbn());
 //        itemService.saveItem(book);
 
+        // FIXME: 아이템 수정 문제 해결하기
         itemService.updateItem(itemId, form.getName(), form.getPrice(), form.getStockQuantity());
 
         return "redirect:/items";

@@ -34,6 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/").authenticated()
                 .antMatchers("/members").hasAuthority("ROLE_ADMIN")
                 .antMatchers("/items", "/items/new").authenticated()
+                .antMatchers("/board/**").authenticated()
                 .antMatchers("/order", "/orders").authenticated()
 
                 // ADMIN Authorization(ADMIN 권한, ROLE_ADMIN) - 3가지 방법

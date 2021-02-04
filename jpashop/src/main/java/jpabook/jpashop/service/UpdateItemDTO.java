@@ -6,4 +6,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UpdateItemDTO {
+    // TODO: updateItemDTO 만들기
 }

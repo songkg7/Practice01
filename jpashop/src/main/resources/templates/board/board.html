@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"/>
+<body>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+    <a href="board/createForm" type="button" class="btn btn-primary" role="button">새 글 쓰기</a>
+    <div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>제목</th>
+                <th>작성자</th>
+                <th>작성일</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr th:each="boardList : ${boardLists}">
+                <td th:text="${boardList.id}"></td>
+                <td>
+<!--                    <a th:href="@{/board/{id}/edit (id=${boardList.id})}"-->
+<!--                       th:text="${boardList.subject}" class="btn btn-default"></a>-->
+                    <a th:href="@{/board/{id} (id=${boardList.id})}"
+                       th:text="${boardList.subject}" class="btn btn-default"></a>
+                </td>
+                <td th:text="${boardList.member.getName()}"></td>
+                <td th:text="${boardList.getCreateTime()}">
+<!--                    <a href="#" th:href="@{/board/{id}/edit (id=${boardList.id})}"-->
+<!--                       class="btn btn-primary" role="button">수정</a>-->
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div th:replace="fragments/footer :: footer"/>
+</div> <!-- /container -->
+</body>
+</html>
