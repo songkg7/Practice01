@@ -35,13 +35,15 @@ class MemberRepositoryTest {
         memberService.join(member);
 
         // when
-        String email = memberRepository.findByEmail(member.getEmail()).getEmail();
+        List<Member> findMember = memberRepository.findByEmail(member.getEmail());
+        if (!findMember.isEmpty()) {
+            String email = findMember.get(0).getEmail();
+            assertEquals(member.getEmail(), email);
+        }
 
         // then
-        assertEquals(member.getEmail(), email);
 
     }
-
 
 
 }

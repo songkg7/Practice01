@@ -50,8 +50,8 @@ public class MemberService implements UserDetailsService {
 //            throw new IllegalStateException("이미 존재하는 회원입니다.");
 //        }
 
-        Member findMember = memberRepository.findByEmail(member.getEmail());
-        if (findMember != null) {
+        List<Member> findMembers = memberRepository.findByEmail(member.getEmail());
+        if (!findMembers.isEmpty()) {
             throw new IllegalStateException("이미 존재하는 회원입니다.");
         }
 
@@ -69,7 +69,7 @@ public class MemberService implements UserDetailsService {
     // Spring Security
     @Override
     public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
-        Member member = memberRepository.findByEmail(userEmail);
+        List<Member> member = memberRepository.findByEmail(userEmail);
 
         List<GrantedAuthority> authorities = new ArrayList<>();
 
@@ -80,6 +80,6 @@ public class MemberService implements UserDetailsService {
             authorities.add(new SimpleGrantedAuthority(Role.MEMBER.getValue()));
         }
 
-        return new User(member.getEmail(), member.getPassword(), authorities);
+        return new User(member.get(0).getEmail(), member.get(0).getPassword(), authorities);
     }
 }

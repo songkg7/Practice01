@@ -33,10 +33,14 @@ public class MemberRepository {
     }
 
     // FIXME: null check!
-    public Member findByEmail(String email) {
+    public List<Member> findByEmail(String email) {
+//        return em.createQuery("select m from Member m where m.email = :email", Member.class)
+//                .setParameter("email", email)
+//                .getResultList().get(0);
+
         return em.createQuery("select m from Member m where m.email = :email", Member.class)
                 .setParameter("email", email)
-                .getResultList().get(0);
+                .getResultList();
     }
 
 }
