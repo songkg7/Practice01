@@ -2,6 +2,7 @@ package jpabook.jpashop.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -28,6 +29,20 @@ public class Board {
     private String mainText; // 본문
 
     private LocalDateTime createTime;
+
+    @Column(columnDefinition = "bigint default 0")
+    private Long viewCount; // 조회수
+
+    public static Board createBoard(Member member, String subject, String mainText) {
+        Board board = new Board();
+        board.setMember(member);
+        board.setSubject(subject);
+        board.setMainText(mainText);
+        board.setCreateTime(LocalDateTime.now());
+        board.setViewCount(0L);
+
+        return board;
+    }
 
 
 

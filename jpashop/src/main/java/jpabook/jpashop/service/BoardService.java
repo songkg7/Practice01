@@ -20,11 +20,7 @@ public class BoardService {
     // 게시물 작성
     @Transactional
     public void create(Member member, String subject, String mainText) {
-        Board board = new Board();
-        board.setMember(member);
-        board.setSubject(subject);
-        board.setMainText(mainText);
-        board.setCreateTime(LocalDateTime.now());
+        Board board = Board.createBoard(member, subject, mainText);
 
         boardRepository.save(board);
     }
@@ -40,6 +36,12 @@ public class BoardService {
 
     }
 
+    @Transactional
+    public void updateViewCount(Long boardId) {
+        Board board = boardRepository.findOne(boardId);
+        board.setViewCount(board.getViewCount() + 1);
+    }
+
     public List<Board> findBoard() {
         return boardRepository.findAll();
     }
@@ -47,6 +49,5 @@ public class BoardService {
     public Board findOne(Long boardId) {
         return boardRepository.findOne(boardId);
     }
-
 
 }

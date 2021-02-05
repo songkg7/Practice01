@@ -13,6 +13,7 @@
                 <th>제목</th>
                 <th>작성자</th>
                 <th>작성일</th>
+                <th>조회수</th>
             </tr>
             </thead>
             <tbody>
@@ -30,6 +31,7 @@
 <!--                    <a href="#" th:href="@{/board/{id}/edit (id=${boardList.id})}"-->
 <!--                       class="btn btn-primary" role="button">수정</a>-->
                 </td>
+                <td th:text="${boardList.getViewCount()}"></td>
             </tr>
             </tbody>
         </table>

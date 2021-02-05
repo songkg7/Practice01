@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -43,15 +44,21 @@ public class MemberService implements UserDetailsService {
         return member.getId();
     }
 
-    private void validateDuplicateMember(Member member) {
-        // EXCEPTION
-//        List<Member> findMembers = memberRepository.findByName(member.getName());
-//        if (!findMembers.isEmpty()) {
-//            throw new IllegalStateException("이미 존재하는 회원입니다.");
-//        }
+    /*
+     * 회원 탈퇴
+     */
+    // NOTE: DB 에 DEL_YN 필드를 만들어서 삭제 여부를 Y, N 으로 저장해서 검색시 DEL_YN 필드값이 N 인 회원들을 검색하는게 정석
+    @Transactional
+    public void delete(Member member) {
+        memberRepository.delete(member);
+    }
 
-        List<Member> findMembers = memberRepository.findByEmail(member.getEmail());
-        if (!findMembers.isEmpty()) {
+
+    // 중복회원 검증
+    private void validateDuplicateMember(Member member) {
+
+        Optional<Member> findMember = memberRepository.findByEmail(member.getEmail());
+        if (findMember.isPresent()) {
             throw new IllegalStateException("이미 존재하는 회원입니다.");
         }
 
@@ -66,10 +73,17 @@ public class MemberService implements UserDetailsService {
         return memberRepository.findOne(memberId);
     }
 
+    public Member findByEmail(String email) {
+        Optional<Member> member = memberRepository.findByEmail(email);
+
+        // FIXME: null 은 예외처리하기
+        return member.orElse(null);
+    }
+
     // Spring Security
     @Override
     public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
-        List<Member> member = memberRepository.findByEmail(userEmail);
+        Optional<Member> member = memberRepository.findByEmail(userEmail);
 
         List<GrantedAuthority> authorities = new ArrayList<>();
 
@@ -80,6 +94,6 @@ public class MemberService implements UserDetailsService {
             authorities.add(new SimpleGrantedAuthority(Role.MEMBER.getValue()));
         }
 
-        return new User(member.get(0).getEmail(), member.get(0).getPassword(), authorities);
+        return member.map(value -> new User(value.getEmail(), value.getPassword(), authorities)).orElse(null);
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -35,9 +36,9 @@ class MemberRepositoryTest {
         memberService.join(member);
 
         // when
-        List<Member> findMember = memberRepository.findByEmail(member.getEmail());
-        if (!findMember.isEmpty()) {
-            String email = findMember.get(0).getEmail();
+        Optional<Member> findMember = memberRepository.findByEmail(member.getEmail());
+        if (findMember.isPresent()) {
+            String email = findMember.get().getEmail();
             assertEquals(member.getEmail(), email);
         }
 

@@ -44,8 +44,9 @@ public class BoardController {
         log.info("BoardController");
 
         String connectUser = principal.getName();
-        Member member = memberRepository.findByEmail(connectUser).get(0);
-        boardService.create(member, form.getSubject(), form.getMainText());
+        Optional<Member> member = memberRepository.findByEmail(connectUser);
+
+        member.ifPresent(value -> boardService.create(value, form.getSubject(), form.getMainText()));
 
         return "redirect:/board";
     }
@@ -53,8 +54,10 @@ public class BoardController {
     // select board
     @GetMapping("/board/{boardId}")
     public String selectBoard(@PathVariable Long boardId, Model model) {
-
         Board board = boardService.findOne(boardId);
+
+        // 조회수 증가
+        boardService.updateViewCount(boardId);
 
         model.addAttribute("board", board);
 
@@ -81,8 +84,6 @@ public class BoardController {
         boardService.update(boardId, form.getSubject(), form.getMainText());
         return "redirect:/board";
     }
-
-
 
 
     // 현재 로그인한 유저의 아이디 가져오기

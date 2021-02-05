@@ -2,17 +2,19 @@ package jpabook.jpashop.controller;
 
 import jpabook.jpashop.domain.Address;
 import jpabook.jpashop.domain.Member;
+import jpabook.jpashop.service.LoginService;
 import jpabook.jpashop.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -20,6 +22,7 @@ import java.util.List;
 public class MemberController {
 
     private final MemberService memberService;
+    private final LoginService loginService;
 
     @GetMapping("/members/new")
     public String createForm(Model model) {
@@ -57,5 +60,32 @@ public class MemberController {
         return "members/memberList";
     }
 
+    // 회원 탈퇴
+    @GetMapping("/members/delete")
+    public String deleteMemberForm(Model model, Principal principal) {
+        String email = principal.getName();
+        Member member = memberService.findByEmail(email);
 
+        model.addAttribute("member", member);
+
+        return "members/deleteMemberForm";
+    }
+
+    @PostMapping("/members/delete")
+    public String deleteMember(Principal principal, @RequestParam("password") String password) {
+        log.info("input password : " + password);
+
+        String email = principal.getName();
+        Member member = memberService.findByEmail(email);
+
+        // password 의 일치 여부 검사
+        if (loginService.authenticate(email, password)) {
+            // 데이터베이스에서 값 삭제
+            memberService.delete(member);
+            // 로그아웃
+            return "redirect:/logout";
+        } else {
+            return "redirect:/";
+        }
+    }
 }

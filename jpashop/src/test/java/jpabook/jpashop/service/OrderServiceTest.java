@@ -114,6 +114,8 @@ class OrderServiceTest {
     private Member createMember() {
         Member member = new Member();
         member.setName("회원1");
+        member.setEmail("songkg@naver.com");
+        member.setPassword("1111");
         member.setAddress(new Address("화성", "삼천병마로", "123-123"));
         em.persist(member);
         return member;

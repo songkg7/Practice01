@@ -8,6 +8,7 @@
         <li><a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin}">Admin</a></li>
         <span sec:authorize="isAuthenticated()" sec:authentication="name"></span>
         <span sec:authorize="isAuthenticated()">님</span>
+        <li><a sec:authorize="isAuthenticated()" th:href="@{/members/delete}">회원탈퇴</a></li>
 <!--        <a sec:authorize="isAnonymous()" th:href="@{/user/login}">로그인</a>-->
 <!--        <a sec:authorize="isAuthenticated()" th:href="@{/user/logout}">로그아웃</a>-->
 <!--        <a sec:authorize="isAnonymous()" th:href="@{/user/signup}">회원가입</a>-->

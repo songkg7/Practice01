@@ -7,7 +7,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
     properties:
       hibernate:
 #        show_sql: true # sql 을 시스템 아웃으로 출력하는 옵션이지만 시스템으로 출력하는 것보다 log 를 통해서 출력하도록 하는 것이 좋다.
