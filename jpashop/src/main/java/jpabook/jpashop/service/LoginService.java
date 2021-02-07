@@ -26,6 +26,5 @@ public class LoginService {
             // FIXME: null check 의 좀 더 깔끔한 방법 찾아보기
             return false;
         }
-
     }
 }

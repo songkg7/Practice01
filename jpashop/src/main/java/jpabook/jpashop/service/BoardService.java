@@ -25,6 +25,7 @@ public class BoardService {
         boardRepository.save(board);
     }
 
+    // 게시물 수정
     @Transactional
     public void update(Long boardId, String subject, String mainText) {
         Board board = boardRepository.findOne(boardId);
@@ -34,6 +35,13 @@ public class BoardService {
         // save 명령은 불필요하다
 //        boardRepository.save(board);
 
+    }
+
+    // 게시물 삭제
+    public void delete(Long boardId) {
+        Board board = boardRepository.findOne(boardId);
+
+        boardRepository.delete(board);
     }
 
     @Transactional

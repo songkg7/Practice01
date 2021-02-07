@@ -30,5 +30,8 @@ public class BoardRepository {
     // 게시글 수정
 
     // 게시글 삭제
+    public void delete(Board board) {
+        em.remove(board);
+    }
 
 }
