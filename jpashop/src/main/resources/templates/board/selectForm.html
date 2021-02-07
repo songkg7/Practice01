@@ -22,6 +22,8 @@
     </div>
     <a href="#" th:href="@{/board/{id}/edit (id=${board.id})}"
        class="btn btn-primary" role="button">수정</a>
+    <a href="#" th:href="@{/board/{id}/delete (id=${board.id})}"
+       class="btn btn-danger" role="button">삭제</a>
     <div th:replace="fragments/footer :: footer"/>
 </div> <!-- /container -->
 </body>

@@ -4,7 +4,6 @@ import jpabook.jpashop.domain.Board;
 import jpabook.jpashop.domain.Member;
 import jpabook.jpashop.repository.MemberRepository;
 import jpabook.jpashop.service.BoardService;
-import jpabook.jpashop.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -89,7 +88,7 @@ public class BoardController {
 
     }
 
-    // post board update
+    // board update 정보 받아와서 엔티티에 반영하기
     @PostMapping("/board/{boardId}/edit")
     public String updateForm(@PathVariable Long boardId, @ModelAttribute("board") BoardCreateForm form) {
 
@@ -97,6 +96,12 @@ public class BoardController {
         return "redirect:/board";
     }
 
+    // board delete
+    @GetMapping("/board/{boardId}/delete")
+    public String delete(@PathVariable Long boardId) {
+        boardService.delete(boardId);
+        return "redirect:/board";
+    }
 
     // 현재 로그인한 유저의 아이디 가져오기
 //    @GetMapping("/username")

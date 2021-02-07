@@ -38,6 +38,7 @@ public class BoardService {
     }
 
     // 게시물 삭제
+    @Transactional
     public void delete(Long boardId) {
         Board board = boardRepository.findOne(boardId);
 
