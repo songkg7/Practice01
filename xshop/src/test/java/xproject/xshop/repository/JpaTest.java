@@ -7,6 +7,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.transaction.annotation.Transactional;
 import xproject.xshop.domain.Member;
+import xproject.xshop.service.MemberService;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -25,13 +26,33 @@ public class JpaTest {
     public void Member_저장() throws Exception {
         // given
         Member member = new Member();
-        member.setUsername("memberA");
+        member.setName("memberA");
+        member.setEmail("songkg@naver.com");
+        member.setPassword("1111");
 
         // when
         testEntityManager.persist(member);
 
         // then
         assertEquals(member, testEntityManager.find(Member.class, member.getId()));
+
+    }
+
+    @Test
+    public void Member_조회() throws Exception {
+        // given
+        Member member = new Member();
+        member.setName("memberA");
+        member.setEmail("songkg@naver.com");
+        member.setPassword("1111");
+
+        // when
+        memberRepository.save(member);
+//        memberService.loadUserByUsername(member.getEmail());
+
+        // then
+
+        assertEquals(member, memberRepository.findByEmail(member.getEmail()));
 
     }
 }

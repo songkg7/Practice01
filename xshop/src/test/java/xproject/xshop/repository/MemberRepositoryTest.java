@@ -35,7 +35,7 @@ public class MemberRepositoryTest {
     @Test
     public void testSpringDataJPA() {
         Member member = new Member();
-        member.setUsername("memberB");
+        member.setName("memberB");
         Member savedMember = memberRepository.save(member);
 
         Optional<Member> findMember = memberRepository.findById(savedMember.getId());
