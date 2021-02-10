@@ -6,6 +6,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -43,7 +44,7 @@ public class Order {
     */
 
     public void addOrderItem(OrderItem orderItem) {
-        orderItem.add(orderItem);
+        orderItems.add(orderItem);
         orderItem.setOrder(this);
     }
 
