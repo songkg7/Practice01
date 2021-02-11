@@ -1,0 +1,2 @@
+xproject/xshop/XshopApplication.java
+ xproject.xshop.XshopApplication
