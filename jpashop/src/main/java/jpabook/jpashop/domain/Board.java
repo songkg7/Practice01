@@ -26,6 +26,7 @@ public class Board {
     private String subject; // 제목
 
     @NotNull
+    @Lob
     private String mainText; // 본문
 
     private LocalDateTime createTime;
