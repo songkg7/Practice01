@@ -28,8 +28,8 @@ public class LoginController {
     @PostMapping("/login")
     public String loginProcess(LoginForm form) {
 
-        log.info(form.getEmail());
-        log.info(form.getPassword());
+//        log.info(form.getEmail());
+//        log.info(form.getPassword());
         if (loginService.authenticate(form.getEmail(), form.getPassword())) {
             return "redirect:/";
         } else {
